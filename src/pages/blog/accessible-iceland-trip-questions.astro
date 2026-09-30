@@ -1,0 +1,215 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Button from '../../components/Button.astro';
+import Icon from '../../components/Icon.astro';
+
+import heroImg from '../../assets/images/Web images/blog/compressed/wheelchair-glacier-lagoon-portrait-iceland.webp';
+import helicopterImg from '../../assets/images/Web images/blog/compressed/helicopter-glacier-tour-iceland.webp';
+import godafossImg from '../../assets/images/Web images/blog/compressed/godafoss-waterfall-wheelchair-tour-iceland.webp';
+import lavaFieldImg from '../../assets/images/Web images/blog/compressed/iceland-accessible-tour-lava-field-reduced-mobility.webp';
+
+const QUESTIONS = [
+  {
+    q: '1. Will you personally guide us, or could the trip end up with someone else?',
+    a: [
+      "It sounds like a simple question, but it matters. The operator should be able to give you the guide's name and tell you about their experience working with travelers who have limited mobility.",
+      'A vague answer like "one of our guides" should make you ask a bit more. You should know who will actually be in charge of the trip and whether they have experience adapting it to different needs.',
+      "We always work with experienced guides. I personally guide most of our trips, but depending on the itinerary and availability, some trips are led by one of my trusted guides instead. Either way, we make sure they understand the traveler's needs and can adapt the experience when it is required.",
+    ],
+  },
+  {
+    q: '2. What is your cancellation policy if a medical issue comes up?',
+    a: [
+      "Travel insurance may cover some situations, but it also matters to know the operator's own cancellation policy. That policy can tell you a lot about how well the company understands its travelers' needs.",
+      'A good policy should treat someone who simply changes their mind differently from someone who has to cancel because of a medical condition or emergency. In our case, for example, we offer a full refund, deposit included, when there is a documented medical emergency up to 7 days before the trip.',
+      'A red flag would be a "non refundable, no exceptions" policy that treats both situations exactly the same way.',
+    ],
+  },
+  {
+    q: '3. What vehicle will we travel in, and does it have enough space for our wheelchair or mobility aid?',
+    a: [
+      'The answer should be specific. It is not enough to hear that the vehicle is "spacious" or "comfortable." They should be able to tell you which vehicle they will use, how much space is actually available, and how getting in and out of the vehicle works.',
+      'It is also worth asking whether the wheelchair or mobility aid needs to be disassembled, and if so, which parts and how they will be transported.',
+      'We work only with high end vehicles that can adapt to different mobility needs, including the Mercedes V Class and Sprinter models. The choice of vehicle depends on the number of travelers and the specific needs of each group.',
+    ],
+  },
+  {
+    q: '4. How would you adapt the trip to a specific need, like motion sickness, fatigue, or sensitivity to temperature?',
+    a: [
+      'There is no single type of reduced mobility. Every person has different needs, and the trip should adapt to the person, not the other way around.',
+      'A good operator should ask you questions before answering: what you can comfortably do, how long you can walk, how much rest you need, or whether there is any situation that could make an activity uncomfortable.',
+      'A red flag is being automatically offered the same "package for travelers with low-mobility travelers" that everyone gets, without any attempt to understand your needs first.',
+      'What matters is that the operator is genuinely interested in you and can offer different options depending on your situation.',
+    ],
+  },
+  {
+    q: '5. If a place on the itinerary is not accessible, what alternatives do you have?',
+    a: [
+      'Iceland has spectacular terrain, but it is also very wild. There are places you simply cannot reach the same way other travelers do.',
+      'So do not settle for asking whether a place is "accessible." Ask what happens if you cannot get there, and what concrete alternatives the operator can offer.',
+      'A good operator should be able to explain what options exist: a different viewpoint, a different route, a specific vehicle, or even a different mode of transport when the terrain requires it.',
+      'For example, we have used helicopters so travelers with limited mobility could still experience the Icelandic Highlands, a place that can be especially hard to reach otherwise.',
+      'The important question is not just "can I go there?" but "if I cannot access it the usual way, how can we adapt the experience?"',
+    ],
+  },
+  {
+    q: '6. What is the real pace of the trip? How many hours will we be out, and how much time will we have at each stop?',
+    a: [
+      'An itinerary can look perfect on paper and turn out exhausting in practice.',
+      'A good operator should adapt the pace of the trip to the person: fewer stops if needed, more time to rest, or simply enough time to enjoy a place without rushing to the next point on the itinerary.',
+      "A red flag is being offered exactly the same itinerary regardless of your needs. This matters even more on low-mobility trips, or if you're looking for Iceland tours for people who can't walk far.",
+    ],
+  },
+  {
+    q: '7. Who will be our point of contact during the trip if something happens?',
+    a: [
+      'You should know who to call if you need help during the trip.',
+      'A good answer includes a specific person and a phone number. It should not depend only on a contact form or an email that someone answers "whenever they can."',
+      'When you travel with specific mobility needs, knowing who will actually be available can bring a lot of peace of mind.',
+    ],
+  },
+  {
+    q: '8. Have you actually organized a trip like this before? Can you tell me about it?',
+    a: [
+      'This is probably one of the most important questions.',
+      'A good answer should be a real, specific experience, not just a marketing line like "we work with all kinds of travelers."',
+      'Ask about an actual case: what needs the traveler had, what had to be adapted, what difficulties came up, and how they were solved.',
+      'In our case, we can talk about a 12 day trip with a guest in a wheelchair, because it is an experience we have genuinely organized and lived through.',
+    ],
+  },
+  {
+    q: '9. If our needs change after booking, what can we adjust, and by when?',
+    a: [
+      'Needs can change. The size of the group might change, a mobility aid might change, the pace of the trip might change, or even how much activity a person can handle.',
+      'A good operator should explain from the start what can be adjusted, by what date, and what consequences that change might have.',
+      'A red flag is a completely rigid contract with no room to adapt the trip, or nobody being able to tell you when the last moment for changes actually is.',
+    ],
+  },
+  {
+    q: '10. What happens if we need to change the plan during the trip itself?',
+    a: [
+      "This is different from changing something before the trip. In Iceland, the weather, the terrain, or a traveler's physical condition on a given day can mean a plan has to change.",
+      'A good operator should be able to react and look for alternatives without making the traveler feel like they are "complicating" the trip.',
+      'Accessibility should not mean following a rigid plan. It should mean having enough alternatives so the trip can adapt when circumstances change.',
+    ],
+  },
+];
+---
+
+<Layout
+  title="10 Questions to Ask Before Booking an Accessible Iceland Tour | Secret Spots Iceland"
+  description="Before you book an accessible trip to Iceland, here are the questions we think you should ask any operator — from vehicles and cancellation policies to what happens when the plan has to change."
+  active="Blog"
+>
+  <Hero
+    framedImage={heroImg}
+    framedImageAlt="Traveller in a wheelchair by a glacier lagoon in Iceland"
+    subtitle="By Luke EM · September 23, 2026"
+    primaryCta=""
+    secondaryCta=""
+  >
+    <Fragment slot="title">Planning an Accessible Trip to Iceland: 10 Questions You Should Ask Any Operator</Fragment>
+  </Hero>
+
+  <article class="blog-article container-pad">
+    <div class="blog-article-col">
+      <a href="/blog" style="display:inline-flex;align-items:center;gap:8px;font:700 14px/1 var(--font-sans);color:var(--text-heading);text-decoration:none;margin-bottom:var(--space-8)">
+        <Icon name="arrow-right" size={16} style="transform:rotate(180deg)" />
+        Back to the blog
+      </a>
+
+      <div style="display:flex;flex-direction:column;gap:var(--space-6)">
+        <p style="font:var(--type-lead);color:var(--text-heading);margin:0">We have organized trips through some of the most remote parts of Iceland, including a 12-day tour with a guest in a wheelchair, and many others with older travelers and guests with limited mobility. Before any trip, the planning starts the same way: a conversation about what actually matters to you. <a href="/contact" style="color:var(--blue-500);text-decoration:underline">See how we approach accessible tours</a>.</p>
+        <p style="font:var(--type-lead);color:var(--text-heading);margin:0">So before you book an accessible trip to Iceland, here are some of the questions we think you should ask any operator.</p>
+      </div>
+
+      {QUESTIONS.slice(0, 5).map((item) => (
+        <section style="margin-top:var(--space-9)">
+          <h2 style="font:400 1.625rem/1.3 var(--font-display);color:var(--text-heading);margin:0 0 var(--space-5)">{item.q}</h2>
+          <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+            {item.a.map((p) => <p style="font:var(--type-lead);color:var(--text-heading);margin:0">{p}</p>)}
+          </div>
+        </section>
+      ))}
+
+      <figure style="margin:var(--space-11) 0">
+        <div style="border-radius:24px;overflow:hidden;aspect-ratio:16/10">
+          <Image src={helicopterImg} alt="Helicopter tour over an Icelandic glacier for travellers with limited mobility" width={900} quality={80} loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+        </div>
+        <figcaption style="font:var(--type-body-sm);color:var(--text-muted);margin-top:var(--space-3);text-align:center">Reaching the Icelandic Highlands by helicopter, when the terrain isn't otherwise accessible.</figcaption>
+      </figure>
+
+      {QUESTIONS.slice(5, 10).map((item) => (
+        <section style="margin-top:var(--space-9)">
+          <h2 style="font:400 1.625rem/1.3 var(--font-display);color:var(--text-heading);margin:0 0 var(--space-5)">{item.q}</h2>
+          <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+            {item.a.map((p) => <p style="font:var(--type-lead);color:var(--text-heading);margin:0">{p}</p>)}
+          </div>
+        </section>
+      ))}
+
+      <section style="margin-top:var(--space-11);background:#F8F7F3;border-radius:24px;padding:var(--space-9)">
+        <h2 style="font:400 1.625rem/1.3 var(--font-display);color:var(--text-heading);margin:0 0 var(--space-5)">The question nobody has ever asked us, and we wish they would</h2>
+        <p style="font:var(--type-lead);color:var(--text-heading);margin:0 0 var(--space-5)">There is one question that probably only someone who has organized many trips like this can answer:</p>
+        <p style="font:400 22px/1.5 var(--font-display);color:var(--text-heading);margin:0 0 var(--space-5)">&ldquo;After all your experience with travelers who have reduced mobility, what do you wish travelers would ask you before booking?&rdquo;</p>
+        <p style="font:var(--type-lead);color:var(--text-heading);margin:0">It is a question worth asking any operator. Not only because the answer can give you useful information, but because how they respond can show you how well they actually understand their travelers' needs.</p>
+      </section>
+
+      <figure style="margin:var(--space-11) 0">
+        <div style="border-radius:24px;overflow:hidden;aspect-ratio:16/10">
+          <Image src={godafossImg} alt="Guide assisting a traveller in a wheelchair at Goðafoss waterfall" width={900} quality={80} loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+        </div>
+        <figcaption style="font:var(--type-body-sm);color:var(--text-muted);margin-top:var(--space-3);text-align:center">On the road during our 12-day wheelchair-accessible tour of Iceland.</figcaption>
+      </figure>
+
+      <section style="margin-top:var(--space-9)">
+        <h2 style="font:400 1.625rem/1.3 var(--font-display);color:var(--text-heading);margin:0 0 var(--space-5)">What role does travel insurance play?</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">Travel insurance can matter a great deal when there are medical conditions or specific mobility needs involved. However, coverage varies a lot between policies, so you should not assume that any insurance will automatically cover a cancellation, a medical emergency, transporting a wheelchair, or an evacuation.</p>
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">Before you travel, ask your insurance company exactly which situations are covered and what documentation you would need if you had to cancel or change the trip.</p>
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">It is also worth asking the operator whether they have any specific recommendation or requirement related to insurance.</p>
+        </div>
+      </section>
+
+      <section style="margin-top:var(--space-9)">
+        <h2 style="font:400 1.625rem/1.3 var(--font-display);color:var(--text-heading);margin:0 0 var(--space-5)">What 8 years of traveling with people who have limited mobility have taught us</h2>
+        <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">After 8 years organizing trips and traveling alongside people with reduced mobility, we have learned that accessibility is not simply about finding a place you can get to. It is about understanding the person, listening to their needs, and adapting the trip to their pace.</p>
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">We have learned to stop, breathe, and enjoy the moment. Not everything has to be rushed, and there is no need to check off a list of places at any cost. Sometimes it means spending more time in one spot, making fewer stops, or simply giving the person the time they need to feel comfortable.</p>
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">We have also learned that everything has to be planned for. The right vehicle, the routes, the rest stops, and when the terrain calls for it, alternatives like a helicopter. You need the right tools in place so the person can move around with ease and peace of mind.</p>
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">But above all, we have learned that every person is different. There is no single way to organize a trip for someone with reduced mobility. What works for one person may not work for another.</p>
+          <p style="font:var(--type-lead);color:var(--text-heading);margin:0">That is why our goal is not to make the traveler feel like their mobility is a problem we have to manage. Our goal is to adapt the trip so that mobility is not what defines the experience.</p>
+        </div>
+      </section>
+
+      <figure style="margin:var(--space-11) 0 0">
+        <div style="border-radius:24px;overflow:hidden;aspect-ratio:16/9">
+          <Image src={lavaFieldImg} alt="Traveller with reduced mobility exploring an Icelandic lava field" width={1200} quality={80} loading="lazy" style="width:100%;height:100%;object-fit:cover" />
+        </div>
+      </figure>
+
+      <div style="margin-top:var(--space-11);padding:var(--space-9);background:#081824;border-radius:24px;display:flex;flex-direction:column;gap:var(--space-6);align-items:flex-start">
+        <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+          <h2 style="font:400 2rem/1.2 var(--font-display);color:var(--cream-50);margin:0">Ready to ask us these questions?</h2>
+          <p style="font:var(--type-lead);color:rgba(255,255,255,.8);margin:0">Tell us about your trip and we'll walk you through exactly how we'd plan it around you.</p>
+        </div>
+        <Button variant="primary" href="/contact">Plan Your Accessible Iceland Trip</Button>
+      </div>
+
+      <div style="margin-top:var(--space-9);padding-top:var(--space-7);border-top:1px solid var(--border-subtle);display:flex;align-items:center;gap:var(--space-4)">
+        <span style="width:44px;height:44px;border-radius:var(--radius-pill);background:var(--avatar-red);color:var(--cream-50);display:inline-flex;align-items:center;justify-content:center;font:700 16px/1 var(--font-sans);flex:0 0 auto">L</span>
+        <div style="display:flex;flex-direction:column">
+          <span style="font:700 15px/1.3 var(--font-sans);color:var(--text-heading)">Luke EM</span>
+          <span style="font:var(--type-body-xs);color:var(--text-muted)">Founder &amp; guide, Secret Spots of Iceland</span>
+        </div>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .blog-article { padding-top: var(--space-11); padding-bottom: var(--space-13); }
+  .blog-article-col { max-width: 720px; margin: 0 auto; }
+</style>

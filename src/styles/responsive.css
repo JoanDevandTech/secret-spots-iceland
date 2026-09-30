@@ -3,9 +3,33 @@
    (see HANDOFF.md) rather than introducing new visual language. */
 
 /* --- layout primitives --- */
-.container-pad { padding-left: var(--space-9); padding-right: var(--space-9); }
+.container-pad { padding-left: clamp(1rem, 4vw, 3rem); padding-right: clamp(1rem, 4vw, 3rem); }
+
+.container-1200 { max-width: 1200px; margin-inline: auto; padding-inline: clamp(1rem, 4vw, 3rem); }
+
+.grid-1-1-gap5 { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+@media (max-width: 768px) {
+  .grid-1-1-gap5 { grid-template-columns: 1fr; gap: var(--space-9); }
+}
+/* text-first-on-mobile modifier: use when the image is the first DOM child
+   but mobile should read text-then-image (Tours, Luke sections) */
+.grid-1-1-gap5.text-first-mobile > :first-child { order: 2; }
+.grid-1-1-gap5.text-first-mobile > :last-child { order: 1; }
+@media (min-width: 769px) {
+  .grid-1-1-gap5.text-first-mobile > * { order: initial; }
+}
+
+.icons-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-9); width: 100%; }
 @media (max-width: 640px) {
-  .container-pad { padding-left: var(--space-6); padding-right: var(--space-6); }
+  .icons-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .icons-grid { grid-template-columns: 1fr; }
+}
+
+.gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .section-py { padding-top: var(--section-py); padding-bottom: var(--section-py); }
@@ -19,43 +43,16 @@
   .section-py-tight { padding-top: var(--space-9); padding-bottom: var(--space-9); }
 }
 
-/* --- hero: framed inset photo alongside the text column ---
-   Matches the Figma frame's own numbers (1440x900 canvas): the photo sits at
-   left:75 top:121 w:635 h:851 — its own bottom (972) runs 72px past the
-   canvas (900), and nothing clips it there, so it deliberately overlaps the
-   section below. That's a deliberate style choice from the design, not a
-   bug: reproduced here as percentages of the hero section (left:5.2%
-   width:44.1% top:13.4% bottom:-8%) so it scales with viewport height, with
-   the hero section given z-index so the overflowing part paints over the
-   next section instead of being painted under it. Mobile-first: below
-   1025px the image stacks in normal flow above the text instead. */
-.hero-framed-image { position: static; width: 100%; aspect-ratio: 3 / 4; max-height: 360px; overflow: hidden; border-radius: var(--radius-image); flex: 0 0 auto; }
-.hero-inner-row { padding-top: var(--space-11); padding-bottom: var(--space-11); }
-.hero-text-col { display: flex; flex-direction: column; gap: var(--space-7); align-items: flex-start; max-width: 100%; min-width: 0; }
-.hero-rating { margin-top: var(--space-9); }
+/* --- hero: full-bleed background photo, left-aligned text column --- */
+.hero-text-col { display: flex; flex-direction: column; gap: var(--space-7); align-items: flex-start; max-width: 560px; min-width: 0; padding: var(--space-13) 0; }
+.hero-rating { margin-top: var(--space-2); }
 /* the title's own font-size (--type-display-lg, 52px) doesn't shrink on its
    own — without this a single long word (e.g. "Photographer") is wider than
    a phone viewport and forces horizontal scroll. */
 .hero-title { overflow-wrap: anywhere; }
 @media (max-width: 640px) {
   .hero-title { font-size: 2.25rem; line-height: 1.2; }
-}
-@media (min-width: 1025px) {
-  .hero-inner, .hero-inner-row { position: static; padding: 0; max-width: none; }
-  .hero-framed-image {
-    position: absolute; left: 5.2%; top: 13.4%; bottom: -8%; width: 44.1%;
-    max-height: none; aspect-ratio: auto; z-index: 1;
-  }
-  .hero-text-col {
-    position: absolute; left: 52%; right: 5.2%; z-index: 1;
-    top: 50%; transform: translateY(-50%); max-width: 560px;
-  }
-  /* sits well clear of the button group, anchored near the section's own
-     bottom edge rather than following the vertically-centered text block. */
-  .hero-rating { position: absolute; left: 52%; right: 5.2%; bottom: 9%; z-index: 1; margin-top: 0; }
-  /* only the H1 rides up onto the photo's edge — the paragraph, buttons and
-     rating stay clear of it on the plain background. */
-  .hero-title { margin-left: -110px; }
+  .hero-text-col { padding: var(--space-11) 0; }
 }
 
 /* --- responsive grid pairs (two-column layouts that stack on tablet) --- */
@@ -120,8 +117,7 @@
 }
 .hero-ctas { display: flex; gap: var(--space-4); flex-wrap: wrap; }
 @media (max-width: 640px) {
-  .hero-ctas { flex-direction: column; width: 100%; }
-  .hero-ctas > a, .hero-ctas > button { width: 100%; }
+  .hero-ctas { flex-direction: column; align-items: center; }
 }
 
 /* --- section headings --- */
@@ -156,7 +152,10 @@
     width: 40px; height: 40px; background: none; border: none;
     cursor: pointer; color: var(--ink-900); padding: 0;
   }
-  .site-nav a { color: var(--ink-900) !important; }
+  .site-nav a, .site-nav button.nav-dropdown-trigger { color: var(--ink-900) !important; }
+  .site-nav { width: 100%; }
+  .nav-dropdown-item { width: 100%; }
+  .nav-dropdown-item .nav-dropdown-trigger { width: 100%; justify-content: center; }
   .site-nav {
     position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
     background: var(--surface-raised);

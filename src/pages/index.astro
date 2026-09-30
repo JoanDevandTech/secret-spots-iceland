@@ -13,18 +13,14 @@ import FaqItem from '../components/FaqItem.astro';
 
 import lukePhotographerImg from '../assets/images/reykjanes-photographer-luke.jpg';
 import waterfallImg from '../assets/images/highlands-traveller-waterfall.webp';
-import haifossImg from '../assets/images/haifoss-waterfall.jpg';
-import coastImg from '../assets/images/vestrahorn-black-sand-dunes.webp';
-import highlandsImg from '../assets/images/highlands-aerial-rainbow-mountains.webp';
-import auroraImg from '../assets/images/northern-lights-iceland.webp';
-import toursVideoUrl from '../assets/images/skogafoss-waterfall-group-photo-a-iceland.mp4?url';
 import lavaVideoUrl from '../assets/images/volcano-eruption-lava-flow-vertical-iceland.mp4?url';
+import heroVideoUrl from '../assets/images/iceland-travel.mp4?url';
+import highlandsTourImg from '../assets/images/south-coast-glacier-snowmobile.webp';
+import ringRoadTourImg from '../assets/images/glacier-lagoon-south-coast-drone.webp';
 
-const GALLERY = [
-  { image: haifossImg, caption: 'Chase the sound of Iceland' },
-  { image: coastImg, caption: 'Where the ocean meets the wild' },
-  { image: highlandsImg, caption: "Into Iceland's untamed interior" },
-  { image: auroraImg, caption: 'A night worth waiting for' },
+const FEATURED_TOURS = [
+  { image: highlandsTourImg, duration: '3 days', title: 'Highlands 3-Day Adventure', description: 'Remote highland routes, hot rivers and volcanic landscapes most tours never reach — with two nights on the road.', price: '€890', href: '/tours' },
+  { image: ringRoadTourImg, duration: '6 days', title: 'Ring Road & Northern Lights', description: 'A full loop of Iceland shaped around your pace, with dedicated nights chasing the aurora.', price: '€1,690', href: '/tours' },
 ];
 
 const BULLETS = [
@@ -65,27 +61,31 @@ const FAQS = [
 ];
 ---
 
-<Layout title="Private Iceland Tours with a Local Guide & Photographer | Secret Spots Iceland" active="Home" transparentNav>
+<Layout
+  title="Private Iceland Tours with a Local Guide & Photographer | Secret Spots Iceland"
+  active="Home"
+  contactPanelStyle="background:var(--surface-footer)"
+  footerStyle="border:none"
+>
   <Hero
-    fullHeight
     framedImage={waterfallImg}
     framedImageAlt="Waterfall in the Icelandic highlands"
+    framedVideo={heroVideoUrl}
     subtitle="Discover Iceland through photography tours in Iceland designed around your pace, interests, and the best light. Explore hidden landscapes with a local Iceland private tour guide."
-    ratingText="5.0 from 100+ guests"
-    tagline="Private experiences · Local guide · Professional photography"
+    primaryVariant="dark"
   >
     <Fragment slot="title">Private Iceland Tours with a Local Guide &amp; Photographer</Fragment>
   </Hero>
 
-  <Section tight style="padding-top:calc(var(--section-py-tight) + 96px)">
+  <Section>
     <div data-reveal style="display:flex;flex-direction:column;gap:var(--space-9);align-items:center">
       <SectionHeading align="center" eyebrow="What to expect" size="lg" maxWidth="784px">
         <Fragment slot="title">Private Iceland tours offer a completely different way to explore the country</Fragment>
         <Fragment slot="lead">Our private tours of Iceland are created for travelers who want flexibility, comfort, and a deeper connection with the country. Every tour is just you and your group — designed around what you want to see, how you want to move, and what the weather and light make possible that day.</Fragment>
       </SectionHeading>
-      <div style="display:flex;flex-wrap:wrap;gap:var(--space-9);justify-content:center">
+      <div class="icons-grid">
         {BULLETS.map((b) => (
-          <div style="display:flex;flex-direction:column;gap:var(--space-5);align-items:flex-start;width:240px">
+          <div style="display:flex;flex-direction:column;gap:var(--space-5);align-items:center;text-align:center">
             <IconChip name={b.icon} size={48} />
             <div style="display:flex;flex-direction:column;gap:4px">
               <span style="font:600 16px/1.3 var(--font-sans);color:var(--text-heading)">{b.title}</span>
@@ -97,56 +97,69 @@ const FAQS = [
     </div>
   </Section>
 
-  <Section tone="dark" tight>
-    <div data-reveal class="rg-1fr-420">
-      <div style="display:flex;flex-direction:column;gap:var(--space-8);align-items:flex-start">
-        <div style="display:flex;flex-direction:column;gap:var(--space-3)">
-          <h2 class="sh-xl" style="color:var(--cream-50);margin:0">Our Iceland Tours</h2>
-          <p style="font:600 1.0625rem/1.7 var(--font-sans);color:var(--star-gold);margin:0">Private experiences tailored to your trip</p>
-        </div>
-        <p style="font:var(--type-lead);color:var(--text-on-dark-muted);margin:0;max-width:620px">Every tour is private and shaped around the weather, the light, and what you actually want to see — with a local guide who knows where the crowds aren't.</p>
-        <Button variant="primary" href="/tours" iconAfter="arrow-right">Check our Photography Tours</Button>
-        <div style="display:flex;align-items:baseline;gap:var(--space-2);color:var(--cream-50)">
-          <span style="font:var(--type-body-sm)">Tours from</span>
-          <span style="font:var(--type-price)">€1,300</span>
-        </div>
+  <section class="container-1200 section-py">
+    <div data-reveal style="display:flex;flex-direction:column;gap:var(--space-11);align-items:center">
+      <div style="display:flex;flex-direction:column;gap:var(--space-5);align-items:center;text-align:center">
+        <h2 style="font:400 2.75rem/1.2 var(--font-display);color:var(--text-heading);margin:0">Curated Iceland Experiences</h2>
+        <p style="font:var(--type-lead);color:var(--text-heading);margin:0">From photography masterclasses to off-the-beaten-path adventures.</p>
       </div>
-      <div style="overflow:hidden;border-radius:var(--radius-image);aspect-ratio:433/770">
-        <video class="lazy-video" data-src={toursVideoUrl} muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
+      <div class="grid-1-1-gap5" style="width:100%;gap:var(--space-5)">
+        {FEATURED_TOURS.map((t) => (
+          <a href={t.href} class="card-clickable" style="display:flex;flex-direction:column;gap:var(--space-6);background:var(--cream-50);border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.05);padding-bottom:var(--space-7);text-decoration:none;color:inherit">
+            <div style="position:relative;aspect-ratio:2/1;overflow:hidden">
+              <Image src={t.image} alt="" width={700} quality={80} loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+              <span style="position:absolute;top:16px;left:16px;background:rgba(29,45,68,.54);color:var(--cream-50);padding:8px 14px;border-radius:20px;font:700 13px/1 var(--font-sans)">{t.duration}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-5);padding:0 var(--space-6);flex:1">
+              <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                <h3 style="font:700 20px/1.2 var(--font-sans);color:var(--text-heading);margin:0">{t.title}</h3>
+                <p style="font:400 16px/1.5 var(--font-sans);color:var(--text-heading);margin:0">{t.description}</p>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:var(--space-3);margin-top:auto">
+                <span class="cta-pill" style="display:inline-flex;align-items:center;justify-content:center;padding:9.5px 24px;background:var(--action-dark-bg);color:var(--action-dark-fg);border-radius:var(--radius-pill);font:var(--type-button);font-size:.9375rem;white-space:nowrap">Check Availability</span>
+                <span style="display:flex;align-items:baseline;gap:6px;color:var(--text-heading)">
+                  <span style="font:400 12px/1 var(--font-sans)">From</span>
+                  <span style="font:400 12px/1 var(--font-sans)">{t.price}</span>
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
       </div>
+      <Button variant="primary" href="/tours" iconAfter="arrow-right">Explore All our Iceland Photography Tours</Button>
     </div>
-  </Section>
+  </section>
 
-  <Section tone="dark" tight id="reviews" style="padding-top:var(--space-11);border-top:1px solid rgba(255,255,255,.1)">
-    <h2 class="sh-lg" data-reveal style="text-align:center;color:var(--cream-50);margin:0 0 var(--space-7)">What our customers say</h2>
+  <Section tone="page" id="reviews" style="border-top:1px solid var(--border-subtle)">
+    <h2 class="sh-lg" data-reveal style="text-align:center;color:var(--text-heading);margin:0 0 var(--space-7)">What our customers say</h2>
     <div data-reveal style="display:flex;gap:var(--space-3);flex-wrap:wrap;justify-content:center;margin-bottom:var(--space-9)">
       {REVIEW_PLATFORMS.map((p) => (
         <a
           href="#"
           target="_blank"
-          style={`display:inline-flex;align-items:center;gap:var(--space-2);height:38px;padding:${p.icon ? '3px 16px 3px 3px' : '3px 16px'};border-radius:var(--radius-pill);background:${p.dark ? 'var(--cream-50)' : 'var(--surface-dark-field)'};text-decoration:none`}
+          style={`display:inline-flex;align-items:center;gap:var(--space-2);height:38px;padding:${p.icon ? '3px 16px 3px 3px' : '3px 16px'};border-radius:var(--radius-pill);background:${p.dark ? 'var(--ink-900)' : 'var(--surface-chip)'};text-decoration:none`}
         >
           {p.icon ? (
             <span style="width:32px;height:32px;border-radius:var(--radius-pill);background:var(--cream-50);display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden">
               <img src={`/icons/${p.icon}-color.svg`} alt="" width="18" height="18" style="width:18px;height:18px;object-fit:contain" />
             </span>
           ) : null}
-          <span style={`font:600 13px/1 var(--font-sans);color:${p.dark ? 'var(--ink-900)' : 'var(--cream-50)'}`}>{p.label}</span>
-          <span style={`display:inline-flex;align-items:center;gap:4px;font:700 13px/1 var(--font-sans);color:${p.dark ? 'var(--ink-900)' : 'var(--cream-50)'}`}>
+          <span style={`font:600 13px/1 var(--font-sans);color:${p.dark ? 'var(--cream-50)' : 'var(--text-heading)'}`}>{p.label}</span>
+          <span style={`display:inline-flex;align-items:center;gap:4px;font:700 13px/1 var(--font-sans);color:${p.dark ? 'var(--cream-50)' : 'var(--text-heading)'}`}>
             {p.rating}<Icon name="star" size={12} color="var(--star-gold)" />
           </span>
         </a>
       ))}
     </div>
     <div class="grid-4" data-reveal>
-      {REVIEWS.map((r) => <ReviewCard name={r.name} date={r.date} initial={r.initial} quote={r.quote} onDark />)}
+      {REVIEWS.map((r) => <ReviewCard name={r.name} date={r.date} initial={r.initial} quote={r.quote} />)}
     </div>
   </Section>
 
   <section style="position:relative;overflow:hidden;min-height:600px;display:flex;align-items:center">
     <Image src={lukePhotographerImg} alt="Luke, local guide and photographer, in the Reykjanes peninsula" width={1600} quality={80} loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%" />
     <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(19,37,51,.95) 5%, rgba(19,37,51,.55) 55%, rgba(19,37,51,.15) 100%)"></div>
-    <div class="container-pad" style="position:relative;max-width:var(--container-max);margin:0 auto;width:100%;padding-top:var(--space-13);padding-bottom:var(--space-13)">
+    <div class="container-1200" style="position:relative;width:100%;padding-top:var(--space-13);padding-bottom:var(--space-13)">
       <div data-reveal style="display:flex;flex-direction:column;gap:var(--space-7);align-items:flex-start;max-width:640px">
         <SectionHeading size="xl" eyebrow="Meet your guide" onDark>
           <Fragment slot="title">Luke — Local Guide &amp; Photographer</Fragment>
@@ -157,63 +170,53 @@ const FAQS = [
     </div>
   </section>
 
-  <section class="container-pad section-py">
-    <div data-reveal style="max-width:var(--container-max);margin:0 auto;display:flex;flex-direction:column;gap:var(--space-10);align-items:center">
-      <h2 style="font:400 2rem/1.2 var(--font-sans);color:var(--ink-900);margin:0;text-align:center">Your Iceland, not the usual Iceland</h2>
-      <div class="image-strip" style="--strip-cols:4;gap:var(--space-5);width:100%">
-        {GALLERY.map((g) => (
-          <div style="display:flex;flex-direction:column;border-radius:var(--radius-image);overflow:hidden">
-            <div style="aspect-ratio:340/466;overflow:hidden">
-              <Image src={g.image} alt="" width={500} quality={80} loading="lazy" style="width:100%;height:100%;object-fit:cover" />
-            </div>
-            <div style="display:flex;flex-direction:column;gap:var(--space-4);padding:var(--space-6);background:var(--surface-chip)">
-              <span style="font:400 16px/1.5 var(--font-sans);color:var(--ink-900)">{g.caption}</span>
-              <a href="#" style="font:600 15px/1 var(--font-sans);color:var(--ink-900);text-decoration:none">Explore →</a>
-            </div>
+  <div style="padding:0 var(--space-8)" id="how-it-works">
+    <section style="padding:var(--space-13) var(--space-9)">
+      <div data-reveal class="grid-1-1-gap5" style="max-width:1200px;margin:0 auto">
+        <div style="overflow:hidden;border-radius:32px;aspect-ratio:437/776">
+          <video class="lazy-video" data-src={lavaVideoUrl} muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-7);align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+            <Eyebrow>How it works</Eyebrow>
+            <h2 style="font:400 2rem/1.2 var(--font-sans);color:var(--text-heading);margin:0">From first message to the photos in your hands</h2>
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="container-pad section-py" style="background:var(--surface-chip)" id="how-it-works">
-    <div data-reveal class="rg-380-1fr">
-      <div style="overflow:hidden;border-radius:var(--radius-image);aspect-ratio:437/776">
-        <video class="lazy-video" data-src={lavaVideoUrl} muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:var(--space-7);align-items:flex-start">
-        <div style="display:flex;flex-direction:column;gap:var(--space-5)">
-          <Eyebrow>How it works</Eyebrow>
-          <h2 style="font:400 2rem/1.2 var(--font-sans);color:var(--text-heading);margin:0">From first message to the photos in your hands</h2>
-        </div>
-        <div style="display:flex;flex-direction:column;width:100%">
-          {STEPS.map((s) => (
-            <div style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-5) 0;border-bottom:1px solid var(--blue-500)">
-              <span style="font:700 16px/1 var(--font-sans);color:var(--blue-500)">{s.number}</span>
-              <div style="display:flex;flex-direction:column;gap:var(--space-3)">
-                <span style="font:var(--type-body-lg);color:var(--text-heading)">{s.title}</span>
-                <p style="font:var(--type-lead);color:var(--text-body);margin:0">{s.description}</p>
+          <div style="display:flex;flex-direction:column;width:100%">
+            {STEPS.map((s) => (
+              <div style="display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-5) 0;border-bottom:1px solid var(--blue-500)">
+                <span style="font:700 16px/1 var(--font-sans);color:var(--blue-500)">{s.number}</span>
+                <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                  <span style="font:var(--type-body-lg);color:var(--text-heading)">{s.title}</span>
+                  <p style="font:var(--type-lead);color:var(--text-body);margin:0">{s.description}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <Button variant="outline" href="/how-it-works" iconAfter="arrow-right">How It Works</Button>
         </div>
-        <Button variant="outline" href="#" iconAfter="arrow-right">How It Works</Button>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-  <Section tone="raised" tight id="faq">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-11)">
-      <SectionHeading align="center" eyebrow="Questions" maxWidth="600px" data-reveal>
+  <Section tone="raised" id="faq">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-11);max-width:700px;margin:0 auto">
+      <SectionHeading align="center" eyebrow="Questions" maxWidth="700px" data-reveal>
         <Fragment slot="title">Frequently Asked Questions</Fragment>
         <Fragment slot="lead">Starter answers below — flag any that need a fact-check against your real policies before this goes live.</Fragment>
       </SectionHeading>
-      <div data-reveal style="display:flex;flex-direction:column;width:100%;max-width:854px">
+      <div data-reveal style="display:flex;flex-direction:column;width:100%">
         {FAQS.map((q) => <FaqItem question={q.question} answer={q.answer} defaultOpen={q.defaultOpen} />)}
       </div>
     </div>
   </Section>
 </Layout>
+
+<style>
+  .card-clickable { transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+  .card-clickable:hover { box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+  .card-clickable:hover .cta-pill { background: var(--action-dark-bg-hover); }
+  .card-clickable:active { transform: var(--press-scale); }
+</style>
 
 <script>
   const lazyVideos = document.querySelectorAll<HTMLVideoElement>('video.lazy-video[data-src]');

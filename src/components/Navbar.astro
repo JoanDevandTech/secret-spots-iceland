@@ -2,22 +2,96 @@
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 
-interface NavItem { label: string; href?: string; hasChevron?: boolean; }
+interface ListLink { label: string; href: string; }
+interface IntroColumn {
+  type: 'intro';
+  title: string;
+  description: string;
+  href: string;
+  secondary?: ListLink;
+}
+interface ListColumn {
+  type: 'list';
+  eyebrow: string;
+  items: ListLink[];
+}
+type MenuColumn = IntroColumn | ListColumn;
+interface MegaMenu { dividers: boolean; columns: MenuColumn[]; }
+interface NavItem { label: string; href?: string; megaMenu?: MegaMenu; }
 interface Props {
   active?: string;
   transparent?: boolean;
+  showContact?: boolean;
   style?: string;
 }
-const { active, transparent = false, style = '' } = Astro.props;
+const { active, transparent = false, showContact = false, style = '' } = Astro.props;
+
 const NAV: NavItem[] = [
-  { label: 'Tours', href: '/tours', hasChevron: true },
+  {
+    label: 'Tours',
+    href: '/tours',
+    megaMenu: {
+      dividers: true,
+      columns: [
+        {
+          type: 'intro',
+          title: 'Iceland Photography Tours',
+          description: 'Private, photography-led tours designed around your pace, interests and the best light.',
+          href: '/tours',
+        },
+        {
+          type: 'list',
+          eyebrow: 'One Day Tours',
+          items: [
+            { label: 'The Hidden Side of Reykjanes', href: '/tours/reykjanes' },
+            { label: 'South Coast Private Iceland', href: '#' },
+            { label: 'Golden Circle', href: '#' },
+            { label: 'Highlands Adventure', href: '#' },
+          ],
+        },
+        {
+          type: 'list',
+          eyebrow: 'Multi-Day Tours',
+          items: [
+            { label: '3 Days South Coast', href: '#' },
+            { label: '6 Days Ultimate Iceland Adventure', href: '#' },
+          ],
+        },
+      ],
+    },
+  },
   { label: 'About', href: '/about' },
-  { label: 'How it works', href: '/#how-it-works' },
-  { label: 'Photography Guide', href: '#' },
-  { label: 'Our Vehicles', href: '#' },
-  { label: 'Blog', href: '#' },
-  { label: 'Reviews', href: '/#reviews' },
-  { label: 'FAQ', href: '/#faq' },
+  {
+    label: 'How it works',
+    href: '/how-it-works',
+    megaMenu: {
+      dividers: false,
+      columns: [
+        {
+          type: 'intro',
+          title: 'How it works',
+          description: 'From your first message to the photos in your hands — see how a Secret Spots tour comes together.',
+          href: '/how-it-works',
+          secondary: { label: 'Our Vehicles', href: '/our-vehicles' },
+        },
+        {
+          type: 'intro',
+          title: 'Photography Guide',
+          description: 'Tips and locations to help you get the most out of your Iceland photography.',
+          href: '/iceland-photography',
+        },
+        {
+          type: 'intro',
+          title: 'Accessible Tours in Iceland',
+          description: 'Flexible itineraries designed to work for travellers of all mobility levels.',
+          href: '/accessible-tours',
+        },
+      ],
+    },
+  },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Reviews', href: '/reviews' },
+  { label: 'FAQ', href: '/faq' },
 ];
 const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
 ---
@@ -25,7 +99,7 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
 <header
   class="site-header container-pad"
   data-transparent={transparent ? 'true' : 'false'}
-  style={`display:flex;align-items:center;justify-content:space-between;background:${transparent ? 'transparent' : 'var(--surface-raised)'};padding-top:14px;padding-bottom:14px;gap:var(--space-8);${style}`}
+  style={`position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;background:${transparent ? 'transparent' : 'var(--surface-page)'};padding-top:14px;padding-bottom:14px;gap:var(--space-8);${style}`}
 >
   <a href="/">
     <Logo height={46} onDark={transparent} />
@@ -35,16 +109,143 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
   </button>
   <nav id="site-nav" class="site-nav" data-open="false" style="display:flex;align-items:center;gap:var(--space-7)">
     {NAV.map((it) => (
-      <a
-        href={it.href || '#'}
-        style={`font:var(--type-nav);font-weight:${active === it.label ? 'var(--weight-bold)' : 'var(--weight-regular)'};color:${textColor};white-space:nowrap;display:inline-flex;align-items:center;gap:4px`}
-      >
-        {it.label}
-        {it.hasChevron ? <Icon name="chevron-down" size={16} /> : null}
-      </a>
+      it.megaMenu ? (
+        <div class="nav-dropdown-item">
+          <button
+            type="button"
+            class="nav-dropdown-trigger"
+            data-menu={it.label}
+            data-href={it.href}
+            style={`font:var(--type-nav);font-weight:${active === it.label ? 'var(--weight-bold)' : 'var(--weight-regular)'};color:${active === it.label ? '#38627F' : textColor};white-space:nowrap;display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:0`}
+          >
+            {it.label}
+            <Icon name="chevron-down" size={16} class="nav-dropdown-chevron" />
+          </button>
+        </div>
+      ) : (
+        <a
+          href={it.href || '#'}
+          style={`font:var(--type-nav);font-weight:${active === it.label ? 'var(--weight-bold)' : 'var(--weight-regular)'};color:${active === it.label ? '#38627F' : textColor};white-space:nowrap;display:inline-flex;align-items:center;gap:4px`}
+        >
+          {it.label}
+        </a>
+      )
     ))}
+    {showContact ? (
+      <a href="/contact" style="background:var(--action-primary-bg);color:var(--action-primary-fg);font:700 14px/1 var(--font-sans);padding:10px 20px;border-radius:var(--radius-pill);white-space:nowrap">
+        Contact us
+      </a>
+    ) : null}
   </nav>
+
+  {NAV.filter((it) => it.megaMenu).map((it) => (
+    <div class="nav-megamenu" data-menu-panel={it.label} data-open="false">
+      <div class:list={['nav-megamenu-inner', { 'nav-megamenu-dividers': it.megaMenu!.dividers }]}>
+        {it.megaMenu!.columns.map((col) => (
+          col.type === 'intro' ? (
+            <div class="nav-megamenu-col">
+              <a href={col.href} class="nav-megamenu-intro">
+                <div>
+                  <span class="nav-megamenu-title-row">
+                    <span class="nav-megamenu-title">{col.title}</span>
+                    <Icon name="arrow-right" size={16} class="nav-megamenu-link-arrow" />
+                  </span>
+                  <p class="nav-megamenu-desc">{col.description}</p>
+                </div>
+              </a>
+              {col.secondary ? (
+                <a href={col.secondary.href} class="nav-megamenu-secondary">
+                  <span>{col.secondary.label}</span>
+                  <Icon name="arrow-right" size={14} class="nav-megamenu-link-arrow" />
+                </a>
+              ) : null}
+            </div>
+          ) : (
+            <div class="nav-megamenu-col">
+              <span class="nav-megamenu-eyebrow">{col.eyebrow}</span>
+              {col.items.map((link) => (
+                <a href={link.href} class="nav-megamenu-link">
+                  <span>{link.label}</span>
+                  <Icon name="arrow-right" size={14} class="nav-megamenu-link-arrow" />
+                </a>
+              ))}
+            </div>
+          )
+        ))}
+      </div>
+    </div>
+  ))}
 </header>
+
+<style>
+  :global(.site-header) { transition: transform 320ms ease; }
+  :global(.site-header.nav-hidden) { transform: translateY(-100%); }
+  :global(.site-header:has(.nav-dropdown-item[data-open="true"])) { background: #F8F7F3 !important; }
+
+  :global(.nav-dropdown-chevron) { transition: transform var(--dur-base, 180ms) ease; }
+  :global(.nav-dropdown-item[data-open="true"] .nav-dropdown-chevron) { transform: rotate(180deg); }
+  .nav-dropdown-item[data-open="true"] .nav-dropdown-trigger { color: #38627F !important; }
+
+  .nav-megamenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: #F8F7F3;
+    border-radius: 0 0 24px 24px;
+    padding: var(--space-9);
+    text-align: left;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+  .nav-megamenu[data-open="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .nav-megamenu-inner { display: flex; gap: var(--space-11); }
+  .nav-megamenu-col { flex: 1; display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+  .nav-megamenu-dividers .nav-megamenu-col:not(:last-child) {
+    padding-right: var(--space-11);
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  .nav-megamenu-intro { display: flex; align-items: flex-start; text-decoration: none; }
+  .nav-megamenu-title-row { display: inline-flex; align-items: center; gap: 6px; }
+  .nav-megamenu-title { display: block; font: 600 20px/1.3 var(--font-sans); color: var(--text-heading); }
+  .nav-megamenu-desc { margin: 4px 0 0; font: 400 14px/1.5 var(--font-sans); color: var(--text-body); max-width: 320px; }
+
+  .nav-megamenu-secondary {
+    display: flex; align-items: center; gap: 6px;
+    text-decoration: none; font: 600 16px/1.3 var(--font-sans); color: var(--text-heading);
+    padding-top: var(--space-3);
+  }
+
+  .nav-megamenu-eyebrow { font: 600 12px/1 var(--font-sans); letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+  .nav-megamenu-link {
+    display: flex; align-items: center; gap: 6px;
+    text-decoration: none; font: 400 16px/1.3 var(--font-sans); color: var(--text-heading);
+    padding: var(--space-2) 0;
+  }
+  .nav-megamenu-link:hover, .nav-megamenu-secondary:hover, .nav-megamenu-intro:hover .nav-megamenu-title { color: var(--blue-500); }
+  :global(.nav-megamenu-link-arrow) {
+    flex: 0 0 auto;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity var(--dur-base, 180ms) ease, transform var(--dur-base, 180ms) ease;
+  }
+  .nav-megamenu-link:hover :global(.nav-megamenu-link-arrow),
+  .nav-megamenu-intro:hover :global(.nav-megamenu-link-arrow),
+  .nav-megamenu-secondary:hover :global(.nav-megamenu-link-arrow) { opacity: 1; transform: translateX(0); }
+
+  @media (max-width: 1024px) {
+    .nav-megamenu { display: none; }
+  }
+</style>
 
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
@@ -73,4 +274,70 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
       });
     });
   }
+
+  document.querySelectorAll<HTMLElement>('.site-header').forEach((header) => {
+    const triggers = header.querySelectorAll<HTMLButtonElement>('.nav-dropdown-trigger');
+    const items = header.querySelectorAll<HTMLElement>('.nav-dropdown-item');
+    const panels = header.querySelectorAll<HTMLElement>('.nav-megamenu');
+
+    function closeAll() {
+      items.forEach((el) => (el.dataset.open = 'false'));
+      panels.forEach((el) => (el.dataset.open = 'false'));
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // below 1024px the mega-menu panel is hidden (see CSS), so tapping
+        // the item should just navigate instead of toggling a dead dropdown
+        if (window.innerWidth < 1024) {
+          const href = trigger.dataset.href;
+          if (href) window.location.href = href;
+          return;
+        }
+        const menuName = trigger.dataset.menu;
+        const item = trigger.closest<HTMLElement>('.nav-dropdown-item');
+        const panel = header.querySelector<HTMLElement>(`.nav-megamenu[data-menu-panel="${menuName}"]`);
+        const isOpen = item?.dataset.open === 'true';
+        closeAll();
+        if (item && panel && !isOpen) {
+          item.dataset.open = 'true';
+          panel.dataset.open = 'true';
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!header.contains(e.target as Node)) closeAll();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAll();
+    });
+  });
+
+  // hide the sticky header on scroll down, reveal it on scroll up
+  document.querySelectorAll<HTMLElement>('.site-header:not([data-transparent="true"])').forEach((header) => {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    function onScroll() {
+      const y = window.scrollY;
+      if (y <= 80) {
+        header.classList.remove('nav-hidden');
+      } else if (y > lastY) {
+        header.classList.add('nav-hidden');
+      } else if (y < lastY) {
+        header.classList.remove('nav-hidden');
+      }
+      lastY = y;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+  });
 </script>

@@ -1,0 +1,198 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Section from '../components/Section.astro';
+import IconChip from '../components/IconChip.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+
+const WHY_CHOOSE = [
+  { icon: 'heart', title: 'Private & Personalized Tours' },
+  { icon: 'star', title: 'Professional Photography Included' },
+  { icon: 'map-pin', title: 'Local Knowledge & Authentic Experiences' },
+  { icon: 'check', title: 'Hidden Gems Beyond the Tourist Trail' },
+];
+
+const THEMES = [
+  {
+    eyebrow: 'Hidden Gems & Off-the-Beaten-Path Experiences',
+    title: 'Discover Iceland Beyond the Crowds',
+    lead: 'Secret Spots of Iceland was built around one simple idea: showing visitors the Iceland that most travelers never get to see. Guests consistently mention the hidden locations, peaceful landscapes, and authentic experiences that set these tours apart.',
+    quotes: [
+      { quote: 'He shows you impressive places that are not overrun with tourists.', name: 'Deborah Taranto' },
+      { quote: 'Each of the spots he takes you to is off the beaten path and therefore has far fewer tourists.', name: 'Hugh' },
+      { quote: 'This tour allowed me to see things I had never seen before.', name: 'Kate Pappas' },
+      { quote: 'Luke absolutely embodies what local guides should be.', name: 'Eric Andersen' },
+    ],
+  },
+  {
+    eyebrow: 'Private Tours & Custom Itineraries',
+    title: 'Tailored Adventures Designed Around You',
+    lead: "No two travelers are the same. Many guests highlight Luke's flexibility, local expertise, and ability to create personalized itineraries that match their interests, pace, and travel style.",
+    quotes: [
+      { quote: 'Luke is truly amazing and passionate about making his tours meaningful, personal and so much fun.', name: 'Tanja' },
+      { quote: 'He tailored our trip to include the sights that were a must-see for our family. We made memories to last a lifetime.', name: 'Kelly Waldron' },
+      { quote: 'Luke is very friendly, and very flexible based on how long you want to stay at any one site.', name: 'Brian' },
+    ],
+  },
+  {
+    eyebrow: 'Photography Experiences',
+    title: "More Than a Tour — Memories You'll Keep Forever",
+    lead: 'Every adventure includes professional photography, allowing guests to fully enjoy the experience while Luke captures the moments.',
+    quotes: [
+      { quote: 'Luke caught the moment perfectly in both video and photos which we will treasure forever.', name: 'Michelle Chang' },
+      { quote: 'Luke is a phenomenal photographer and we are so happy with the pictures he took.', name: 'Heidi' },
+      { quote: 'Coming home, I have some outstanding photos to remember my trip.', name: 'Ed' },
+    ],
+  },
+  {
+    eyebrow: 'Family & Small Group Adventures',
+    title: 'Meaningful Experiences for Families and Friends',
+    lead: 'Whether traveling as a couple, a family, or a small group of friends, guests consistently mention how welcoming and accommodating Luke is throughout the journey.',
+    quotes: [
+      { quote: 'My children loved the places Luke took us to explore.', name: 'Jan' },
+      { quote: 'Our family had an unforgettable experience with Luke as our travel guide.', name: 'Kelly Waldron' },
+      { quote: 'Coming home, I have some outstanding photos to remember my trip.', name: 'Eric Andersen' },
+    ],
+  },
+  {
+    eyebrow: 'Multi-Day Adventures',
+    title: 'Explore More of Iceland',
+    lead: 'For travelers who want to go deeper, multi-day tours provide the opportunity to experience more remote locations, changing landscapes, and unforgettable moments.',
+    quotes: [
+      { quote: 'Professional, knowledgeable guide with unforgettable memories.', name: 'Richard Ernashaw' },
+      { quote: "Luke's 4x4 gave us access to Iceland's secret spots that we wouldn't get to see in a rental car.", name: 'Humphrey B' },
+      { quote: 'Two days in Iceland; a memory of a lifetime.', name: 'Ed' },
+    ],
+  },
+];
+
+const WHAT_GUESTS_SAY = [
+  'Hidden locations away from tourist crowds',
+  'Personalized and flexible itineraries',
+  'Professional photography included',
+  'Comfortable private transportation',
+  'Authentic local experiences',
+  'Friendly and knowledgeable guidance',
+  'Lifelong memories and meaningful connections',
+];
+
+const REVIEWS = [
+  { name: 'Richard Ernashaw', quote: "3 Day Tour To Southcoast — Luke is professional, knowledgable guide, we ended up with 3 day tour to southcoast, northen lights and circle tour and all was well thought through with unforgettable memmories. He knows a lot of nice spots off the beaten path as well, was great companion, flexible to adjust, easy to talk to. Car is comfy, even had a minibar for us for those moments coming back from waterfalls feeling cold. We were also catching northern lights, finding spots, so it was a lot of fun too. Highly recommend!" },
+  { name: 'AL Kringer', quote: "Don't think twice, just book this tour with Luke! He's very professional and friendly with lots of cool stories to share. We were very fortunate to be the only couple with him that day, not to mention the weather that day could not have been more perfect for us! The places he took us were out-of-this-world beautiful! He made sure we had lots of amazing photos from the trip! Definitely a memorable experience!" },
+  { name: 'Zachary Hertzman', quote: 'Reykjavik Tour — Amazing time with Luke, the perfect one day road trip from Reykjavik. Not only were the spots perfect, but Luke was a wonderful guide and such a great person to hang with for the day. Would highly recommend!' },
+  { name: 'Irina', quote: 'South Coast Tour — He went above and beyond for us to enjoy our stay. If anyone is looking for an incredibly kind, talented and smart guide while on vacation, Luke is absolutely 100% your guy. I would recommend him for a truly enjoyable private experience. Thank you Luke for making my trip so memorable! I would definitely come back again!' },
+  { name: 'AL Kringer', quote: 'Absolute Must Do! — My mom, sister and I took this tour with Luke last week and had an absolutely fantastic time! Luke was so friendly and knowledgeable of Iceland and all of the amazing spots that he took us to. We were truly off the beaten path — not a tour bus in sight! It was a truly unforgettable day that I would recommend to anyone.' },
+  { name: 'Melanie Cochran', quote: 'This tour was one of the best experiences of my life. We saw so many amazing places. Luke was super nice and informative. Since there was only one other couple with us, he was able to personalize the day for us by constantly asking where we wanted to stop and how long we wanted to stay at each place. Highly recommend!' },
+  { name: 'Humphrey B', quote: "3 days Tour — Luke's 4X4 gave us access to Iceland's secret spots that we wouldn't get to see in a rental car — he knew exactly where to go and modified each day based on what we enjoyed most." },
+  { name: 'Samrat Deka', quote: "Was definitely one of the best experiences I've had in over 20 years of travel across the world. If there's one thing to do on a trip to Reykjavik... this is it!" },
+  { name: 'Jan', quote: 'Do not Hesitate....Book with Luke — What a fantastic experience we had with Luke! My 20 and 18 year old children loved the places Luke took us to explore and he showed us some true wonders of Iceland that most people will not get a chance to see.' },
+  { name: 'Kelly Waldron', quote: 'My family had an unforgettable experience with Luke as our travel guide for 3 days. He was very kind and patient, and knowledgeable about the places we visited. His photography was outstanding, too. He tailored our trip to include the sights that were a must-see for our family. We made memories to last a lifetime!' },
+  { name: 'Tanja', quote: 'Phenomenal experience! — Luke is truly amazing and passionate about making his tours meaningful, personal and so much fun! Never a dull moment as his energy is so good and he engages in great conversations during the longer drives. I am further grateful for his unique gift of capturing special moments through his skilled photography.' },
+  { name: 'Deborah Taranto', quote: "Another great story… — Touring the island with Luke is the best thing you can do. He shows you impressive places that are not overrun with tourists. You get a good impression of authentic Iceland, interesting stories to tell and memories for life. Luke is courteous, uncomplicated, reliable and simply super likeable." },
+  { name: 'Brian', quote: 'Excellent Customized Local Tour — Luke will really take you to secret places. You won\'t see any crowds on this tour. Luke is very friendly, and very flexible based on how long you want to stay at any one site.' },
+  { name: 'Hugh', quote: "This experience with Luke was hands-down one of the best I had during my entire nine-week trip to Europe. Each of the spots he takes you to is off the beaten path and therefore has far fewer tourists. The photos Luke takes are a fantastic memento of the experience. The best part of the experience has to be Luke himself — such a kind and generous host." },
+  { name: 'Eric Andersen', quote: 'Wow! This adventure was better than we expected. Luke took us on an action-packed drive to nearly a dozen fascinating but hard-to-find spots across the Reykjanes Peninsula, explaining the unique geological history along the way. The photos and movies he took were wonderful, and will be cherished for many years.' },
+  { name: 'Heidi', quote: 'We visited Iceland in October 2021 and had such a wonderful time. Luke was a fantastic guide and brought us to some unique and beautiful locations — a much better option for anyone who wants a personalized, small group setting. Luke is a phenomenal photographer and we are so happy with the pictures he took.' },
+  { name: 'Michelle Chang', quote: 'A Truly Professional Tour and Photographer — 100% Recommend! Luke caught the moment perfectly in both video and photos which we will treasure forever. He had so many great ideas for photo locations and it was very easy and natural to have him take our photo.' },
+];
+---
+
+<Layout title="Iceland Private Tours Reviews | Secret Spots Iceland" active="Reviews">
+  <div style="padding:0 var(--space-8) var(--space-8)">
+    <section style="background:#081824;border-radius:32px;min-height:420px;display:flex;align-items:flex-end;justify-content:center;padding:var(--space-11) var(--space-9)">
+      <div style="display:flex;flex-direction:column;gap:var(--space-8);align-items:center;max-width:857px">
+        <div style="display:flex;flex-direction:column;gap:var(--space-8);align-items:center;text-align:center">
+          <h1 class="reviews-hero-title" style="font:400 3rem/1.1 var(--font-display);color:var(--cream-100);margin:0;overflow-wrap:anywhere">Real Experiences. Real Memories. Real Iceland.</h1>
+          <p style="font:400 18px/1.6 var(--font-sans);color:rgba(255,255,255,.9);margin:0">From hidden waterfalls and volcanic landscapes to unforgettable road trips and professional photography, discover what guests have to say about exploring Iceland with Luke.</p>
+        </div>
+        <a href="#reviews-intro" style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2);color:var(--amber-400);text-decoration:none">
+          <span style="font:700 15px/1 var(--font-sans)">Read the reviews</span>
+          <Icon name="chevron-down" size={20} color="var(--amber-400)" />
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <Section id="reviews-intro" tight style="padding-top:var(--space-7)">
+    <div style="display:flex;flex-direction:column;gap:var(--space-11);align-items:center">
+      <h2 style="font:400 2rem/1.2 var(--font-display);color:var(--text-heading);margin:0;text-align:center">Why Travelers Choose Secret Spots Iceland</h2>
+      <div class="icons-grid">
+        {WHY_CHOOSE.map((w) => (
+          <div style="display:flex;flex-direction:column;gap:var(--space-5);align-items:center;text-align:center">
+            <IconChip name={w.icon} size={48} />
+            <span style="font:600 16px/1.3 var(--font-sans);color:var(--text-heading)">{w.title}</span>
+          </div>
+        ))}
+      </div>
+      <div style="max-width:720px;display:flex;flex-direction:column;gap:var(--space-7);align-items:center;text-align:center;background:var(--cream-50);border-radius:24px;padding:var(--space-9)">
+        <div style="display:flex;gap:4px">
+          {Array.from({ length: 5 }).map(() => <Icon name="star" size={18} color="var(--star-gold)" />)}
+        </div>
+        <p style="font:400 22px/1.5 var(--font-sans);color:var(--text-heading);margin:0">&ldquo;This experience was one of a lifetime. Visited so many beautiful places, places I would have never found on my own. Luke knows what he is doing and is an awesome photographer.&rdquo;</p>
+        <span style="font:700 14px/1 var(--font-sans);color:var(--text-heading)">— Roberto Irias</span>
+        <Button variant="primary" href="/contact">Book Your Adventure</Button>
+      </div>
+    </div>
+  </Section>
+
+  {THEMES.map((t, i) => (
+    <Section tone={i % 2 === 0 ? 'alt' : 'page'}>
+      <div style="display:flex;flex-direction:column;gap:var(--space-9);align-items:center">
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);align-items:center;text-align:center;max-width:720px">
+          <span style="font:var(--type-eyebrow);letter-spacing:var(--tracking-eyebrow);text-transform:uppercase;color:var(--text-eyebrow)">{t.eyebrow}</span>
+          <h2 style="font:400 2.25rem/1.2 var(--font-display);color:var(--text-heading);margin:0">{t.title}</h2>
+          <p style="font:var(--type-lead);color:var(--text-body);margin:0">{t.lead}</p>
+        </div>
+        <div class="quote-grid">
+          {t.quotes.map((q) => (
+            <div style="background:var(--cream-50);border-radius:16px;padding:var(--space-7);display:flex;flex-direction:column;gap:var(--space-5)">
+              <p style="font:400 16px/1.6 var(--font-sans);color:var(--text-heading);margin:0">&ldquo;{q.quote}&rdquo;</p>
+              <span style="font:700 14px/1 var(--font-sans);color:var(--text-muted)">— {q.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Section>
+  ))}
+
+  <Section tone="alt">
+    <div style="display:flex;flex-direction:column;gap:var(--space-8);align-items:center">
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);align-items:center;text-align:center;max-width:680px">
+        <h2 style="font:400 2.25rem/1.2 var(--font-display);color:var(--text-heading);margin:0">What Guests Say Most Often</h2>
+        <p style="font:var(--type-lead);color:var(--text-body);margin:0">After reading hundreds of reviews, the same themes appear again and again:</p>
+      </div>
+      <div class="guest-checklist">
+        {WHAT_GUESTS_SAY.map((item) => (
+          <div style="display:flex;align-items:center;gap:var(--space-4);background:var(--cream-50);border-radius:12px;padding:var(--space-5) var(--space-6)">
+            <Icon name="check" size={20} color="var(--blue-500)" style="flex:0 0 auto" />
+            <span style="font:400 16px/1.4 var(--font-sans);color:var(--text-heading)">{item}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Section>
+
+  <Section id="reviews" tone="page">
+    <div style="display:flex;flex-direction:column;gap:var(--space-9);align-items:center">
+      <h2 style="font:400 2.5rem/1.2 var(--font-display);color:var(--text-heading);margin:0;text-align:center">Reviews</h2>
+      <div class="grid-4">
+        {REVIEWS.map((r) => (
+          <ReviewCard name={r.name} date="Verified traveller" quote={r.quote} />
+        ))}
+      </div>
+    </div>
+  </Section>
+</Layout>
+
+<style>
+  .quote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-6); width: 100%; }
+  .guest-checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); width: 100%; max-width: 900px; }
+
+  @media (max-width: 768px) {
+    .guest-checklist { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .reviews-hero-title { font-size: 2rem !important; }
+  }
+</style>

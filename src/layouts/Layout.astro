@@ -9,12 +9,20 @@ interface Props {
   description?: string;
   active?: string;
   transparentNav?: boolean;
+  hideNav?: boolean;
+  hideContactPanel?: boolean;
+  footerStyle?: string;
+  contactPanelStyle?: string;
 }
 const {
   title,
   description = 'Private, photography-led Iceland tours with local guide Luke — hidden landscapes, flexible itineraries, no crowds.',
   active,
   transparentNav = false,
+  hideNav = false,
+  hideContactPanel = false,
+  footerStyle = '',
+  contactPanelStyle = '',
 } = Astro.props;
 
 ---
@@ -30,11 +38,11 @@ const {
   </head>
   <body style="background:var(--surface-page)">
     <div style={transparentNav ? 'position:relative' : undefined}>
-      <Navbar active={active} transparent={transparentNav} style={transparentNav ? 'position:absolute;top:0;left:0;right:0;z-index:20' : undefined} />
+      {hideNav ? null : <Navbar active={active} transparent={transparentNav} showContact style={transparentNav ? 'position:absolute;top:0;left:0;right:0;z-index:20' : undefined} />}
       <slot />
     </div>
-    <ContactPanel />
-    <Footer />
+    {hideContactPanel ? null : <ContactPanel style={contactPanelStyle} />}
+    <Footer style={footerStyle} />
 
     <script>
       const items = document.querySelectorAll<HTMLElement>('[data-reveal]');

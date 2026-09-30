@@ -1,0 +1,506 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+
+const COUNTRY_CODES = [
+  { name: 'Iceland', code: '+354', flag: '🇮🇸' },
+  { name: 'Afghanistan', code: '+93', flag: '🇦🇫' },
+  { name: 'Albania', code: '+355', flag: '🇦🇱' },
+  { name: 'Algeria', code: '+213', flag: '🇩🇿' },
+  { name: 'Andorra', code: '+376', flag: '🇦🇩' },
+  { name: 'Angola', code: '+244', flag: '🇦🇴' },
+  { name: 'Argentina', code: '+54', flag: '🇦🇷' },
+  { name: 'Armenia', code: '+374', flag: '🇦🇲' },
+  { name: 'Australia', code: '+61', flag: '🇦🇺' },
+  { name: 'Austria', code: '+43', flag: '🇦🇹' },
+  { name: 'Azerbaijan', code: '+994', flag: '🇦🇿' },
+  { name: 'Bahamas', code: '+1242', flag: '🇧🇸' },
+  { name: 'Bahrain', code: '+973', flag: '🇧🇭' },
+  { name: 'Bangladesh', code: '+880', flag: '🇧🇩' },
+  { name: 'Belarus', code: '+375', flag: '🇧🇾' },
+  { name: 'Belgium', code: '+32', flag: '🇧🇪' },
+  { name: 'Belize', code: '+501', flag: '🇧🇿' },
+  { name: 'Benin', code: '+229', flag: '🇧🇯' },
+  { name: 'Bhutan', code: '+975', flag: '🇧🇹' },
+  { name: 'Bolivia', code: '+591', flag: '🇧🇴' },
+  { name: 'Bosnia and Herzegovina', code: '+387', flag: '🇧🇦' },
+  { name: 'Botswana', code: '+267', flag: '🇧🇼' },
+  { name: 'Brazil', code: '+55', flag: '🇧🇷' },
+  { name: 'Brunei', code: '+673', flag: '🇧🇳' },
+  { name: 'Bulgaria', code: '+359', flag: '🇧🇬' },
+  { name: 'Burkina Faso', code: '+226', flag: '🇧🇫' },
+  { name: 'Burundi', code: '+257', flag: '🇧🇮' },
+  { name: 'Cambodia', code: '+855', flag: '🇰🇭' },
+  { name: 'Cameroon', code: '+237', flag: '🇨🇲' },
+  { name: 'Canada', code: '+1', flag: '🇨🇦' },
+  { name: 'Cape Verde', code: '+238', flag: '🇨🇻' },
+  { name: 'Central African Republic', code: '+236', flag: '🇨🇫' },
+  { name: 'Chad', code: '+235', flag: '🇹🇩' },
+  { name: 'Chile', code: '+56', flag: '🇨🇱' },
+  { name: 'China', code: '+86', flag: '🇨🇳' },
+  { name: 'Colombia', code: '+57', flag: '🇨🇴' },
+  { name: 'Comoros', code: '+269', flag: '🇰🇲' },
+  { name: 'Congo', code: '+242', flag: '🇨🇬' },
+  { name: 'Costa Rica', code: '+506', flag: '🇨🇷' },
+  { name: 'Croatia', code: '+385', flag: '🇭🇷' },
+  { name: 'Cuba', code: '+53', flag: '🇨🇺' },
+  { name: 'Cyprus', code: '+357', flag: '🇨🇾' },
+  { name: 'Czech Republic', code: '+420', flag: '🇨🇿' },
+  { name: 'Denmark', code: '+45', flag: '🇩🇰' },
+  { name: 'Djibouti', code: '+253', flag: '🇩🇯' },
+  { name: 'Dominican Republic', code: '+1809', flag: '🇩🇴' },
+  { name: 'DR Congo', code: '+243', flag: '🇨🇩' },
+  { name: 'Ecuador', code: '+593', flag: '🇪🇨' },
+  { name: 'Egypt', code: '+20', flag: '🇪🇬' },
+  { name: 'El Salvador', code: '+503', flag: '🇸🇻' },
+  { name: 'Estonia', code: '+372', flag: '🇪🇪' },
+  { name: 'Eswatini', code: '+268', flag: '🇸🇿' },
+  { name: 'Ethiopia', code: '+251', flag: '🇪🇹' },
+  { name: 'Fiji', code: '+679', flag: '🇫🇯' },
+  { name: 'Finland', code: '+358', flag: '🇫🇮' },
+  { name: 'France', code: '+33', flag: '🇫🇷' },
+  { name: 'Gabon', code: '+241', flag: '🇬🇦' },
+  { name: 'Gambia', code: '+220', flag: '🇬🇲' },
+  { name: 'Georgia', code: '+995', flag: '🇬🇪' },
+  { name: 'Germany', code: '+49', flag: '🇩🇪' },
+  { name: 'Ghana', code: '+233', flag: '🇬🇭' },
+  { name: 'Greece', code: '+30', flag: '🇬🇷' },
+  { name: 'Greenland', code: '+299', flag: '🇬🇱' },
+  { name: 'Guatemala', code: '+502', flag: '🇬🇹' },
+  { name: 'Guinea', code: '+224', flag: '🇬🇳' },
+  { name: 'Haiti', code: '+509', flag: '🇭🇹' },
+  { name: 'Honduras', code: '+504', flag: '🇭🇳' },
+  { name: 'Hong Kong', code: '+852', flag: '🇭🇰' },
+  { name: 'Hungary', code: '+36', flag: '🇭🇺' },
+  { name: 'India', code: '+91', flag: '🇮🇳' },
+  { name: 'Indonesia', code: '+62', flag: '🇮🇩' },
+  { name: 'Iran', code: '+98', flag: '🇮🇷' },
+  { name: 'Iraq', code: '+964', flag: '🇮🇶' },
+  { name: 'Ireland', code: '+353', flag: '🇮🇪' },
+  { name: 'Israel', code: '+972', flag: '🇮🇱' },
+  { name: 'Italy', code: '+39', flag: '🇮🇹' },
+  { name: 'Ivory Coast', code: '+225', flag: '🇨🇮' },
+  { name: 'Jamaica', code: '+1876', flag: '🇯🇲' },
+  { name: 'Japan', code: '+81', flag: '🇯🇵' },
+  { name: 'Jordan', code: '+962', flag: '🇯🇴' },
+  { name: 'Kazakhstan', code: '+7', flag: '🇰🇿' },
+  { name: 'Kenya', code: '+254', flag: '🇰🇪' },
+  { name: 'Kosovo', code: '+383', flag: '🇽🇰' },
+  { name: 'Kuwait', code: '+965', flag: '🇰🇼' },
+  { name: 'Kyrgyzstan', code: '+996', flag: '🇰🇬' },
+  { name: 'Laos', code: '+856', flag: '🇱🇦' },
+  { name: 'Latvia', code: '+371', flag: '🇱🇻' },
+  { name: 'Lebanon', code: '+961', flag: '🇱🇧' },
+  { name: 'Lesotho', code: '+266', flag: '🇱🇸' },
+  { name: 'Liberia', code: '+231', flag: '🇱🇷' },
+  { name: 'Libya', code: '+218', flag: '🇱🇾' },
+  { name: 'Liechtenstein', code: '+423', flag: '🇱🇮' },
+  { name: 'Lithuania', code: '+370', flag: '🇱🇹' },
+  { name: 'Luxembourg', code: '+352', flag: '🇱🇺' },
+  { name: 'Madagascar', code: '+261', flag: '🇲🇬' },
+  { name: 'Malawi', code: '+265', flag: '🇲🇼' },
+  { name: 'Malaysia', code: '+60', flag: '🇲🇾' },
+  { name: 'Maldives', code: '+960', flag: '🇲🇻' },
+  { name: 'Mali', code: '+223', flag: '🇲🇱' },
+  { name: 'Malta', code: '+356', flag: '🇲🇹' },
+  { name: 'Mauritania', code: '+222', flag: '🇲🇷' },
+  { name: 'Mauritius', code: '+230', flag: '🇲🇺' },
+  { name: 'Mexico', code: '+52', flag: '🇲🇽' },
+  { name: 'Moldova', code: '+373', flag: '🇲🇩' },
+  { name: 'Monaco', code: '+377', flag: '🇲🇨' },
+  { name: 'Mongolia', code: '+976', flag: '🇲🇳' },
+  { name: 'Montenegro', code: '+382', flag: '🇲🇪' },
+  { name: 'Morocco', code: '+212', flag: '🇲🇦' },
+  { name: 'Mozambique', code: '+258', flag: '🇲🇿' },
+  { name: 'Myanmar', code: '+95', flag: '🇲🇲' },
+  { name: 'Namibia', code: '+264', flag: '🇳🇦' },
+  { name: 'Nepal', code: '+977', flag: '🇳🇵' },
+  { name: 'Netherlands', code: '+31', flag: '🇳🇱' },
+  { name: 'New Zealand', code: '+64', flag: '🇳🇿' },
+  { name: 'Nicaragua', code: '+505', flag: '🇳🇮' },
+  { name: 'Niger', code: '+227', flag: '🇳🇪' },
+  { name: 'Nigeria', code: '+234', flag: '🇳🇬' },
+  { name: 'North Korea', code: '+850', flag: '🇰🇵' },
+  { name: 'North Macedonia', code: '+389', flag: '🇲🇰' },
+  { name: 'Norway', code: '+47', flag: '🇳🇴' },
+  { name: 'Oman', code: '+968', flag: '🇴🇲' },
+  { name: 'Pakistan', code: '+92', flag: '🇵🇰' },
+  { name: 'Palestine', code: '+970', flag: '🇵🇸' },
+  { name: 'Panama', code: '+507', flag: '🇵🇦' },
+  { name: 'Papua New Guinea', code: '+675', flag: '🇵🇬' },
+  { name: 'Paraguay', code: '+595', flag: '🇵🇾' },
+  { name: 'Peru', code: '+51', flag: '🇵🇪' },
+  { name: 'Philippines', code: '+63', flag: '🇵🇭' },
+  { name: 'Poland', code: '+48', flag: '🇵🇱' },
+  { name: 'Portugal', code: '+351', flag: '🇵🇹' },
+  { name: 'Qatar', code: '+974', flag: '🇶🇦' },
+  { name: 'Romania', code: '+40', flag: '🇷🇴' },
+  { name: 'Russia', code: '+7', flag: '🇷🇺' },
+  { name: 'Rwanda', code: '+250', flag: '🇷🇼' },
+  { name: 'Saudi Arabia', code: '+966', flag: '🇸🇦' },
+  { name: 'Senegal', code: '+221', flag: '🇸🇳' },
+  { name: 'Serbia', code: '+381', flag: '🇷🇸' },
+  { name: 'Singapore', code: '+65', flag: '🇸🇬' },
+  { name: 'Slovakia', code: '+421', flag: '🇸🇰' },
+  { name: 'Slovenia', code: '+386', flag: '🇸🇮' },
+  { name: 'Somalia', code: '+252', flag: '🇸🇴' },
+  { name: 'South Africa', code: '+27', flag: '🇿🇦' },
+  { name: 'South Korea', code: '+82', flag: '🇰🇷' },
+  { name: 'South Sudan', code: '+211', flag: '🇸🇸' },
+  { name: 'Spain', code: '+34', flag: '🇪🇸' },
+  { name: 'Sri Lanka', code: '+94', flag: '🇱🇰' },
+  { name: 'Sudan', code: '+249', flag: '🇸🇩' },
+  { name: 'Sweden', code: '+46', flag: '🇸🇪' },
+  { name: 'Switzerland', code: '+41', flag: '🇨🇭' },
+  { name: 'Syria', code: '+963', flag: '🇸🇾' },
+  { name: 'Taiwan', code: '+886', flag: '🇹🇼' },
+  { name: 'Tajikistan', code: '+992', flag: '🇹🇯' },
+  { name: 'Tanzania', code: '+255', flag: '🇹🇿' },
+  { name: 'Thailand', code: '+66', flag: '🇹🇭' },
+  { name: 'Togo', code: '+228', flag: '🇹🇬' },
+  { name: 'Trinidad and Tobago', code: '+1868', flag: '🇹🇹' },
+  { name: 'Tunisia', code: '+216', flag: '🇹🇳' },
+  { name: 'Turkey', code: '+90', flag: '🇹🇷' },
+  { name: 'Turkmenistan', code: '+993', flag: '🇹🇲' },
+  { name: 'Uganda', code: '+256', flag: '🇺🇬' },
+  { name: 'Ukraine', code: '+380', flag: '🇺🇦' },
+  { name: 'United Arab Emirates', code: '+971', flag: '🇦🇪' },
+  { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
+  { name: 'United States', code: '+1', flag: '🇺🇸' },
+  { name: 'Uruguay', code: '+598', flag: '🇺🇾' },
+  { name: 'Uzbekistan', code: '+998', flag: '🇺🇿' },
+  { name: 'Venezuela', code: '+58', flag: '🇻🇪' },
+  { name: 'Vietnam', code: '+84', flag: '🇻🇳' },
+  { name: 'Yemen', code: '+967', flag: '🇾🇪' },
+  { name: 'Zambia', code: '+260', flag: '🇿🇲' },
+  { name: 'Zimbabwe', code: '+263', flag: '🇿🇼' },
+];
+const FIND_US_OPTIONS = ['Google', 'Social Media', 'Tripadvisor/Viator', 'Referral', 'Other'];
+---
+
+<Layout title="Contact Us | Secret Spots Iceland" active="Contact us" transparentNav hideContactPanel footerStyle="border:none;border-top:1px solid rgba(255,255,255,.12)">
+  <script src="https://www.google.com/recaptcha/api.js" async defer is:inline></script>
+  <section style="background:#081824;padding-top:calc(var(--space-13) + 64px);padding-bottom:var(--space-13)">
+    <div class="container-1200">
+      <div class="grid-1-1-gap5" style="align-items:start">
+        <div data-reveal style="display:flex;flex-direction:column;gap:var(--space-6);align-items:flex-start;padding-top:var(--space-9)">
+          <span style="font:700 13px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--amber-400)">Get in touch</span>
+          <h1 style="font:400 2.75rem/1.2 var(--font-display);color:#E9E6DD;margin:0">Let's start planning your Secret Spots of Iceland adventure</h1>
+          <p style="font:var(--type-body);color:#E9E6DD;margin:0;max-width:460px">Tell us your travel dates and what you'd love to discover — a private photography tour, a custom itinerary, or one tailored to your mobility needs.</p>
+
+          <div style="display:flex;flex-wrap:nowrap;gap:var(--space-4);padding-top:var(--space-2);width:100%">
+            {[
+              { icon: 'camera', label: 'Private photography tours' },
+              { icon: 'mountain', label: 'Custom itineraries' },
+              { icon: 'wheelchair', label: 'Accessible travel & limited mobility' },
+              { icon: 'shield-check', label: 'Trusted by 300+ travelers' },
+            ].map((item, i, arr) => (
+              <>
+                <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:0">
+                  <Icon name={item.icon} size={22} color="#E9E6DD" />
+                  <span style="font:400 12px/1.35 var(--font-sans);color:#E9E6DD">{item.label}</span>
+                </div>
+                {i < arr.length - 1 ? <span style="width:1px;align-self:stretch;flex:0 0 auto;background:rgba(233,230,221,.25)" /> : null}
+              </>
+            ))}
+          </div>
+        </div>
+
+        <div data-reveal style="background:#F8F7F3;border-radius:24px;padding:var(--space-9);box-shadow:var(--shadow-float)">
+          <form id="contact-form" novalidate>
+            <div class="form-progress" style="display:flex;align-items:center;gap:10px;margin-bottom:var(--space-8)">
+              <div class="form-progress-step is-active" data-progress-dot="1">
+                <span class="form-progress-dot">1</span>
+                <span class="form-progress-label">Personal data</span>
+              </div>
+              <span class="form-progress-line" data-progress-line></span>
+              <div class="form-progress-step" data-progress-dot="2">
+                <span class="form-progress-dot">2</span>
+                <span class="form-progress-label">Travel data</span>
+              </div>
+            </div>
+
+            <div data-step="1">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-6)">
+                <h2 style="font:400 1.5rem/1.2 var(--font-display);color:var(--text-heading);margin:0">Personal data</h2>
+                <span style="font:400 12px/1 var(--font-sans);color:var(--text-muted)"><span class="req-mark">*</span> Required fields</span>
+              </div>
+
+              <div class="contact-field-row" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);margin-bottom:var(--space-5)">
+                <label style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">First Name <span class="req-mark">*</span></span>
+                  <input type="text" name="firstName" required class="contact-input" />
+                </label>
+                <label style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Last Name <span class="req-mark">*</span></span>
+                  <input type="text" name="lastName" required class="contact-input" />
+                </label>
+              </div>
+
+              <label style="display:flex;flex-direction:column;gap:6px;margin-bottom:var(--space-5)">
+                <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Email <span class="req-mark">*</span></span>
+                <input type="email" name="email" required class="contact-input" />
+              </label>
+
+              <label style="display:flex;flex-direction:column;gap:6px;margin-bottom:var(--space-5)">
+                <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Tell us about your ideal Iceland experience <span class="req-mark">*</span></span>
+                <textarea name="experience" required rows={4} class="contact-input" style="resize:vertical;font-family:var(--font-sans)"></textarea>
+              </label>
+
+              <div class="contact-field-row" style="display:grid;grid-template-columns:220px 1fr;gap:var(--space-5);margin-bottom:var(--space-7)">
+                <label style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Country code <span class="req-mark">*</span></span>
+                  <span style="position:relative;display:block">
+                    <select name="countryCode" required class="contact-input" style="padding-right:34px">
+                      {COUNTRY_CODES.map((c) => <option value={c.code}>{c.flag} {c.name} ({c.code})</option>)}
+                    </select>
+                    <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted)">
+                      <Icon name="chevron-down" size={16} />
+                    </span>
+                  </span>
+                </label>
+                <label style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Phone <span class="req-mark">*</span></span>
+                  <input type="tel" name="phone" required class="contact-input" />
+                </label>
+              </div>
+
+              <div style="display:flex;justify-content:flex-end">
+                <button type="button" id="to-step-2" style="display:inline-flex;align-items:center;gap:10px;background:var(--action-primary-bg);color:var(--action-primary-fg);font:700 15px/1 var(--font-sans);padding:14px 24px;border-radius:var(--radius-pill);border:none;cursor:pointer;white-space:nowrap">
+                  Continue
+                  <Icon name="arrow-right" size={16} />
+                </button>
+              </div>
+            </div>
+
+            <div data-step="2" style="display:none">
+              <button type="button" id="back-to-step-1" style="display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer;font:600 13px/1 var(--font-sans);color:var(--text-muted);margin-bottom:var(--space-6)">
+                <Icon name="arrow-right" size={14} style="transform:rotate(180deg)" />
+                Back
+              </button>
+
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-6)">
+                <h2 style="font:400 1.5rem/1.2 var(--font-display);color:var(--text-heading);margin:0">Travel data</h2>
+                <span style="font:400 12px/1 var(--font-sans);color:var(--text-muted)">Your plans can be flexible</span>
+              </div>
+
+              <label style="display:flex;flex-direction:column;gap:6px;margin-bottom:var(--space-6)">
+                <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Preferred tour date <span class="req-mark">*</span></span>
+                <span style="position:relative;display:block">
+                  <input type="text" name="tourDate" placeholder="dd/mm/yyyy" required class="contact-input" style="padding-right:40px" />
+                  <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted)">
+                    <Icon name="chevron-down" size={16} />
+                  </span>
+                </span>
+              </label>
+
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-7)">
+                <div style="display:flex;flex-direction:column;gap:2px">
+                  <span style="font:700 14px/1.2 var(--font-sans);color:var(--text-heading)">Number of Guests</span>
+                  <span style="font:400 12px/1 var(--font-sans);color:var(--text-muted)">You can update this later</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:var(--space-5)">
+                  <button type="button" class="guest-stepper-btn" data-action="decrement" aria-label="Decrease guests">
+                    <Icon name="minus" size={14} />
+                  </button>
+                  <span id="guest-count" style="font:700 16px/1 var(--font-sans);color:var(--text-heading);min-width:12px;text-align:center">1</span>
+                  <button type="button" class="guest-stepper-btn guest-stepper-btn-amber" data-action="increment" aria-label="Increase guests">
+                    <Icon name="plus" size={14} />
+                  </button>
+                </div>
+              </div>
+              <input type="hidden" name="guests" id="guests-input" value="1" />
+
+              <hr style="border:none;border-top:1px solid var(--border-subtle);margin:0 0 var(--space-7)" />
+
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:var(--space-6)">
+                <h2 style="font:700 20px/1.2 var(--font-sans);color:var(--text-heading);margin:0">How did you find us?</h2>
+                <span style="font:400 12px/1 var(--font-sans);color:var(--text-muted)">Choose one <span class="req-mark">*</span></span>
+              </div>
+
+              <div style="display:flex;flex-wrap:wrap;gap:var(--space-3);margin-bottom:var(--space-7)">
+                {FIND_US_OPTIONS.map((opt, i) => (
+                  <button type="button" class="find-us-pill" data-value={opt} aria-pressed={i === 0 ? 'true' : 'false'}>
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              <input type="hidden" name="foundUs" id="found-us-input" value={FIND_US_OPTIONS[0]} />
+
+              <hr style="border:none;border-top:1px solid var(--border-subtle);margin:0 0 var(--space-7)" />
+
+              <div style="margin-bottom:var(--space-7)">
+                <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading);display:block;margin-bottom:8px">Verify you're not a robot <span class="req-mark">*</span></span>
+                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" id="recaptcha-widget"></div>
+                <span id="captcha-error" style="display:none;font:400 12px/1.4 var(--font-sans);color:#b3261e;margin-top:6px">Please confirm you're not a robot.</span>
+                <p style="font:400 11px/1.4 var(--font-sans);color:var(--text-muted);margin:8px 0 0;max-width:380px">This is Google's public test key, which always passes — swap in your own reCAPTCHA site key and add server-side verification before this goes live.</p>
+              </div>
+
+              <label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:var(--space-7)">
+                <input type="checkbox" name="privacyConsent" id="privacy-consent" required style="margin-top:3px;width:16px;height:16px;flex:0 0 auto" />
+                <span style="font:400 13px/1.5 var(--font-sans);color:var(--text-heading)">I agree to the <a href="/privacy-policy" target="_blank" style="color:var(--blue-500);text-decoration:underline">Privacy Policy</a> and consent to Secret Spots of Iceland storing my information to respond to this inquiry. <span class="req-mark">*</span></span>
+              </label>
+
+              <div style="display:flex;justify-content:flex-end">
+                <button type="submit" id="contact-submit" style="display:inline-flex;align-items:center;gap:10px;background:var(--action-primary-bg);color:var(--action-primary-fg);font:700 15px/1 var(--font-sans);padding:14px 24px;border-radius:var(--radius-pill);border:none;cursor:pointer;white-space:nowrap;flex:0 0 auto">
+                  Send inquiry
+                  <Icon name="arrow-right" size={16} />
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .req-mark { color: #b3261e; }
+
+  .form-progress-step { display: flex; align-items: center; gap: 8px; }
+  .form-progress-dot {
+    width: 26px; height: 26px; border-radius: 50%; flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    font: 700 12px/1 var(--font-sans);
+    border: 2px solid var(--border-field);
+    color: var(--text-muted);
+    background: var(--surface-raised);
+    transition: var(--transition-control);
+  }
+  .form-progress-label { font: 600 13px/1 var(--font-sans); color: var(--text-muted); white-space: nowrap; transition: var(--transition-control); }
+  .form-progress-step.is-active .form-progress-dot { border-color: var(--text-heading); background: var(--text-heading); color: var(--cream-50); }
+  .form-progress-step.is-active .form-progress-label { color: var(--text-heading); }
+  .form-progress-line { flex: 1; height: 2px; border-radius: 2px; background: var(--border-field); position: relative; overflow: hidden; }
+  .form-progress-line::after { content: ''; position: absolute; inset: 0; width: 0%; background: var(--action-primary-bg); transition: width 320ms ease; }
+  .form-progress-line.is-filled::after { width: 100%; }
+  @media (max-width: 480px) {
+    .form-progress-label { display: none; }
+  }
+
+  .contact-input {
+    width: 100%;
+    box-sizing: border-box;
+    font: 400 15px/1.4 var(--font-sans);
+    color: var(--ink-900);
+    background: var(--surface-raised);
+    border: 1px solid #CCC6B0;
+    border-radius: 8px;
+    padding: 0 14px;
+    height: var(--control-h-md);
+    outline: none;
+    transition: var(--transition-control);
+    appearance: none;
+  }
+  textarea.contact-input { height: auto; padding: 12px 14px; }
+  .contact-input:focus { border-color: var(--blue-500); }
+
+  .guest-stepper-btn {
+    width: 32px; height: 32px; border-radius: var(--radius-pill);
+    border: 1px solid var(--border-field); background: var(--surface-raised);
+    color: var(--text-heading); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: var(--transition-control);
+  }
+  .guest-stepper-btn-amber { background: var(--amber-400); border-color: var(--amber-400); color: var(--ink-900); }
+  .guest-stepper-btn:hover { opacity: .85; }
+  .guest-stepper-btn:active { transform: var(--press-scale); }
+
+  .find-us-pill {
+    font: 600 14px/1 var(--font-sans);
+    color: var(--text-heading);
+    background: var(--surface-raised);
+    border: 1px solid var(--border-field);
+    border-radius: var(--radius-pill);
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: var(--transition-control);
+  }
+  .find-us-pill[aria-pressed="true"] {
+    background: var(--ink-900);
+    color: var(--cream-50);
+    border-color: var(--ink-900);
+  }
+
+  @media (max-width: 640px) {
+    .contact-field-row { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<script>
+  const guestCount = document.getElementById('guest-count');
+  const guestsInput = document.getElementById('guests-input') as HTMLInputElement;
+  let guests = 1;
+  document.querySelectorAll<HTMLButtonElement>('.guest-stepper-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.action === 'increment') guests += 1;
+      else guests = Math.max(1, guests - 1);
+      if (guestCount) guestCount.textContent = String(guests);
+      if (guestsInput) guestsInput.value = String(guests);
+    });
+  });
+
+  const foundUsInput = document.getElementById('found-us-input') as HTMLInputElement;
+  document.querySelectorAll<HTMLButtonElement>('.find-us-pill').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll<HTMLButtonElement>('.find-us-pill').forEach((p) => p.setAttribute('aria-pressed', 'false'));
+      pill.setAttribute('aria-pressed', 'true');
+      if (foundUsInput) foundUsInput.value = pill.dataset.value ?? '';
+    });
+  });
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const step1 = form?.querySelector<HTMLElement>('[data-step="1"]');
+  const step2 = form?.querySelector<HTMLElement>('[data-step="2"]');
+
+  function validateStep(container: HTMLElement | null | undefined) {
+    if (!container) return true;
+    const fields = container.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input[required], select[required], textarea[required]');
+    for (const field of fields) {
+      if (!field.checkValidity()) {
+        field.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const progressDot1 = document.querySelector<HTMLElement>('[data-progress-dot="1"]');
+  const progressDot2 = document.querySelector<HTMLElement>('[data-progress-dot="2"]');
+  const progressLine = document.querySelector<HTMLElement>('[data-progress-line]');
+
+  document.getElementById('to-step-2')?.addEventListener('click', () => {
+    if (!validateStep(step1)) return;
+    if (step1) step1.style.display = 'none';
+    if (step2) step2.style.display = 'block';
+    progressDot2?.classList.add('is-active');
+    progressLine?.classList.add('is-filled');
+    form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('back-to-step-1')?.addEventListener('click', () => {
+    if (step2) step2.style.display = 'none';
+    if (step1) step1.style.display = 'block';
+    progressDot2?.classList.remove('is-active');
+    progressLine?.classList.remove('is-filled');
+    form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // Google reCAPTCHA v2 checkbox — using Google's PUBLIC TEST site key, which always
+  // passes and never blocks a real bot. Swap in your own site key from
+  // google.com/recaptcha, and verify the token server-side, before this goes live.
+  const captchaError = document.getElementById('captcha-error') as HTMLElement;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!validateStep(step2)) return;
+    const recaptchaResponse = (window as any).grecaptcha?.getResponse?.();
+    if (!recaptchaResponse) {
+      if (captchaError) captchaError.style.display = 'block';
+      document.getElementById('recaptcha-widget')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (captchaError) captchaError.style.display = 'none';
+    const btn = document.getElementById('contact-submit');
+    if (btn) btn.textContent = 'Thanks — Luke will reply within 24 hours';
+  });
+</script>

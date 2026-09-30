@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Section from '../../components/Section.astro';
+import Icon from '../../components/Icon.astro';
+import type { GetStaticPaths } from 'astro';
+import { POSTS } from '../../data/blog-posts';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  return paginate(POSTS, { pageSize: 9 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const pageNumbers = Array.from({ length: page.lastPage }, (_, i) => i + 1);
+const pageHref = (n: number) => (n === 1 ? '/blog' : `/blog/${n}`);
+---
+
+<Layout title={`Iceland Travel Blog — Local Tips & Hidden Gems | Secret Spots Iceland${page.currentPage > 1 ? ` | Page ${page.currentPage}` : ''}`} active="Blog">
+  <div style="padding:0 var(--space-8) var(--space-8)">
+    <section style="background:#081824;border-radius:32px;min-height:500px;display:flex;align-items:flex-end;justify-content:center;padding:var(--space-11) var(--space-9)">
+      <div style="display:flex;flex-direction:column;gap:var(--space-8);align-items:center;max-width:857px">
+        <div style="display:flex;flex-direction:column;gap:var(--space-8);align-items:center;text-align:center">
+          <h1 class="blog-hero-title" style="font:400 3rem/1.1 var(--font-display);color:var(--cream-100);margin:0;overflow-wrap:anywhere">Iceland Travel Blog</h1>
+          <p style="font:400 18px/1.6 var(--font-sans);color:rgba(255,255,255,.9);margin:0">Local tips, hidden gems and stories from the road — written by Luke and the Secret Spots team.</p>
+        </div>
+        <a href="#posts" style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2);color:var(--amber-400);text-decoration:none">
+          <span style="font:700 15px/1 var(--font-sans)">Read the latest</span>
+          <Icon name="chevron-down" size={20} color="var(--amber-400)" />
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <Section id="posts" tight style="padding-top:var(--space-7)">
+    <div style="display:flex;flex-direction:column;gap:var(--space-11);align-items:center">
+      <div class="grid-tours">
+        {page.data.map((p) => (
+          <a href={p.href} class="card-clickable" style="display:flex;flex-direction:column;gap:var(--space-6);background:var(--cream-50);border-radius:16px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.05);padding-bottom:var(--space-7);text-decoration:none;color:inherit">
+            <div style="position:relative;aspect-ratio:2/1;overflow:hidden">
+              <Image src={p.image} alt="" width={500} quality={80} loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+              <span style="position:absolute;top:16px;left:16px;background:rgba(29,45,68,.54);color:var(--cream-50);padding:8px 14px;border-radius:20px;font:700 13px/1 var(--font-sans)">{p.date}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:var(--space-4);padding:0 var(--space-6);flex:1">
+              <h2 style="font:700 20px/1.3 var(--font-sans);color:var(--text-heading);margin:0">{p.title}</h2>
+              <p style="font:400 14px/1.6 var(--font-sans);color:var(--text-body);margin:0">{p.excerpt}</p>
+              <span style="display:inline-flex;align-items:center;gap:6px;margin-top:auto;padding-top:var(--space-3);font:700 14px/1 var(--font-sans);color:var(--text-heading)">
+                Read More
+                <Icon name="arrow-right" size={14} />
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      {page.lastPage > 1 && (
+        <nav aria-label="Blog pagination" style="display:flex;align-items:center;gap:var(--space-3)">
+          <a
+            href={page.url.prev ?? '#'}
+            aria-disabled={page.url.prev ? undefined : 'true'}
+            class="pagination-arrow"
+            style={`opacity:${page.url.prev ? 1 : 0.35};pointer-events:${page.url.prev ? 'auto' : 'none'}`}
+            aria-label="Previous page"
+          >
+            <Icon name="arrow-right" size={16} style="transform:rotate(180deg)" />
+          </a>
+          {pageNumbers.map((n) => (
+            <a
+              href={pageHref(n)}
+              class="pagination-number"
+              aria-current={n === page.currentPage ? 'page' : undefined}
+            >
+              {n}
+            </a>
+          ))}
+          <a
+            href={page.url.next ?? '#'}
+            aria-disabled={page.url.next ? undefined : 'true'}
+            class="pagination-arrow"
+            style={`opacity:${page.url.next ? 1 : 0.35};pointer-events:${page.url.next ? 'auto' : 'none'}`}
+            aria-label="Next page"
+          >
+            <Icon name="arrow-right" size={16} />
+          </a>
+        </nav>
+      )}
+    </div>
+  </Section>
+</Layout>
+
+<style>
+  @media (max-width: 640px) {
+    .blog-hero-title { font-size: 2rem !important; }
+  }
+
+  .card-clickable { transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+  .card-clickable:hover { box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+  .card-clickable:active { transform: var(--press-scale); }
+
+  .pagination-arrow, .pagination-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: var(--transition-control);
+  }
+  .pagination-arrow {
+    border: 1px solid var(--border-field);
+    background: var(--cream-50);
+    color: var(--ink-900);
+  }
+  .pagination-arrow:hover { background: var(--cream-100); }
+  .pagination-arrow:active { transform: var(--press-scale); }
+
+  .pagination-number {
+    font: 700 14px/1 var(--font-sans);
+    color: var(--text-heading);
+    background: transparent;
+  }
+  .pagination-number:hover { background: var(--cream-50); }
+  .pagination-number[aria-current="page"] { background: var(--ink-900); color: var(--cream-50); }
+</style>

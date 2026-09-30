@@ -15,3 +15,8 @@ dist/
 
 # large source bundle (already extracted into design-system/)
 Secret Spots Iceland Design System.zip
+.vercel
+
+# raw/unused source image library — only the files actually imported by the
+# site's code are force-added individually (see git commit history)
+src/assets/images/

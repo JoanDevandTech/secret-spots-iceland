@@ -1,0 +1,9 @@
+# Raw/unprocessed source material not referenced anywhere in the site.
+# Excluded to keep deploys fast — nothing here is imported by Astro.
+src/assets/images/videos drone/
+src/assets/images/accesibility/
+src/assets/images/Pics for ads/
+src/assets/images/Pics for ads-20260911T205612Z-1-003.zip
+src/assets/images/for web all-20260601T170001Z-3-001.zip
+src/assets/images/*.psd
+src/assets/images/*.zip
