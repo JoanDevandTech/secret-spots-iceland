@@ -3,6 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 
 const COUNTRY_CODES = [
+  { name: 'United States', code: '+1', flag: '🇺🇸' },
+  { name: 'Canada', code: '+1', flag: '🇨🇦' },
+  { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
   { name: 'Iceland', code: '+354', flag: '🇮🇸' },
   { name: 'Afghanistan', code: '+93', flag: '🇦🇫' },
   { name: 'Albania', code: '+355', flag: '🇦🇱' },
@@ -32,7 +35,6 @@ const COUNTRY_CODES = [
   { name: 'Burundi', code: '+257', flag: '🇧🇮' },
   { name: 'Cambodia', code: '+855', flag: '🇰🇭' },
   { name: 'Cameroon', code: '+237', flag: '🇨🇲' },
-  { name: 'Canada', code: '+1', flag: '🇨🇦' },
   { name: 'Cape Verde', code: '+238', flag: '🇨🇻' },
   { name: 'Central African Republic', code: '+236', flag: '🇨🇫' },
   { name: 'Chad', code: '+235', flag: '🇹🇩' },
@@ -165,8 +167,6 @@ const COUNTRY_CODES = [
   { name: 'Uganda', code: '+256', flag: '🇺🇬' },
   { name: 'Ukraine', code: '+380', flag: '🇺🇦' },
   { name: 'United Arab Emirates', code: '+971', flag: '🇦🇪' },
-  { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
-  { name: 'United States', code: '+1', flag: '🇺🇸' },
   { name: 'Uruguay', code: '+598', flag: '🇺🇾' },
   { name: 'Uzbekistan', code: '+998', flag: '🇺🇿' },
   { name: 'Venezuela', code: '+58', flag: '🇻🇪' },
@@ -176,6 +176,16 @@ const COUNTRY_CODES = [
   { name: 'Zimbabwe', code: '+263', flag: '🇿🇼' },
 ];
 const FIND_US_OPTIONS = ['Google', 'Social Media', 'Tripadvisor/Viator', 'Referral', 'Other'];
+
+const TOUR_OPTIONS = [
+  'Secret Reykjanes',
+  'South Coast & Waterfalls',
+  'Golden Circle Secrets',
+  'Snæfellsnes Peninsula',
+  'Highlands 3-Day Adventure',
+  'Ring Road & Northern Lights',
+  "Not sure yet / custom itinerary",
+];
 ---
 
 <Layout title="Contact Us | Secret Spots Iceland" active="Contact us" transparentNav hideContactPanel footerStyle="border:none;border-top:1px solid rgba(255,255,255,.12)">
@@ -283,6 +293,18 @@ const FIND_US_OPTIONS = ['Google', 'Social Media', 'Tripadvisor/Viator', 'Referr
                 <h2 style="font:400 1.5rem/1.2 var(--font-display);color:var(--text-heading);margin:0">Travel data</h2>
                 <span style="font:400 12px/1 var(--font-sans);color:var(--text-muted)">Your plans can be flexible</span>
               </div>
+
+              <label style="display:flex;flex-direction:column;gap:6px;margin-bottom:var(--space-6)">
+                <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Which tour are you interested in? <span class="req-mark">*</span></span>
+                <span style="position:relative;display:block">
+                  <select name="tour" required class="contact-input" style="padding-right:34px">
+                    {TOUR_OPTIONS.map((t) => <option value={t}>{t}</option>)}
+                  </select>
+                  <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-muted)">
+                    <Icon name="chevron-down" size={16} />
+                  </span>
+                </span>
+              </label>
 
               <label style="display:flex;flex-direction:column;gap:6px;margin-bottom:var(--space-6)">
                 <span style="font:700 13px/1 var(--font-sans);color:var(--text-heading)">Preferred tour date <span class="req-mark">*</span></span>

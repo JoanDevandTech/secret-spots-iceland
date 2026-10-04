@@ -20,3 +20,4 @@ Secret Spots Iceland Design System.zip
 # raw/unused source image library — only the files actually imported by the
 # site's code are force-added individually (see git commit history)
 src/assets/images/
+.env*
