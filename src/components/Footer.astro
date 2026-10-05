@@ -31,7 +31,7 @@ const socials = [
   </div>
   <div style="display:flex;gap:var(--space-4)">
     {socials.map((s) => (
-      <a href="#" aria-label={s.label} style="width:40px;height:40px;border-radius:var(--radius-pill);background:var(--cream-50);color:var(--ink-800);display:inline-flex;align-items:center;justify-content:center">
+      <a href="#" aria-label={s.label} data-ev="click_link" data-ev-text={s.label} style="width:40px;height:40px;border-radius:var(--radius-pill);background:var(--cream-50);color:var(--ink-800);display:inline-flex;align-items:center;justify-content:center">
         <Icon name={s.icon} size={18} />
       </a>
     ))}
