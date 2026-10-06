@@ -1,7 +1,7 @@
 import accessibleImg from '../assets/images/Web images/blog/compressed/wheelchair-glacier-lagoon-portrait-iceland.webp';
 import photoGuideImg from '../assets/images/south-coast-vestrahorn-photographer.webp';
 import wheelchair12DayImg from '../assets/images/Web images/blog/compressed/godafoss-waterfall-wheelchair-tour-iceland.webp';
-import photoTipsImg from '../assets/images/iceland-photographer-luke-secret-spots-iceland.webp';
+import photoTipsImg from '../assets/images/luke-portrait.jpg';
 import southCoast1DayImg from '../assets/images/south-coast-vestrahorn-tour.webp';
 import sixDaysImg from '../assets/images/glacier-lagoon-south-coast-drone.webp';
 import stongImg from '../assets/images/landmannalaugar-iceland-highlands.webp';

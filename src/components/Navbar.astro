@@ -95,6 +95,21 @@ const NAV: NavItem[] = [
   { label: 'FAQ', href: '/faq' },
 ];
 const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
+
+// mobile has no room for the full desktop mega-menu, so each dropdown
+// flattens down to a simple list of every link it contains
+function flattenMegaMenu(menu: MegaMenu): ListLink[] {
+  const links: ListLink[] = [];
+  menu.columns.forEach((col) => {
+    if (col.type === 'intro') {
+      links.push({ label: col.title, href: col.href });
+      if (col.secondary && col.secondary.href !== col.href) links.push(col.secondary);
+    } else {
+      links.push(...col.items);
+    }
+  });
+  return links;
+}
 ---
 
 <header
@@ -103,12 +118,12 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
   style={`position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;background:${transparent ? 'transparent' : 'var(--surface-page)'};padding-top:14px;padding-bottom:14px;gap:var(--space-8);${style}`}
 >
   <a href="/">
-    <Logo height={46} onDark={transparent} />
+    <Logo height={54} onDark={transparent} />
   </a>
   <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav" style={`color:${textColor}`}>
     <Icon name="menu" size={20} />
   </button>
-  <nav id="site-nav" class="site-nav" data-open="false" style="display:flex;align-items:center;gap:var(--space-7)">
+  <nav id="site-nav" class="site-nav" data-open="false" style="display:flex;gap:var(--space-7)">
     {NAV.map((it) => (
       it.megaMenu ? (
         <div class="nav-dropdown-item">
@@ -122,6 +137,11 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
             {it.label}
             <Icon name="chevron-down" size={16} class="nav-dropdown-chevron" />
           </button>
+          <div class="nav-mobile-submenu">
+            {flattenMegaMenu(it.megaMenu).map((link) => (
+              <a href={link.href} class="nav-mobile-submenu-link">{link.label}</a>
+            ))}
+          </div>
         </div>
       ) : (
         <a
@@ -133,7 +153,7 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
       )
     ))}
     {showContact ? (
-      <a href="/contact" style="background:var(--action-primary-bg);color:var(--action-primary-fg);font:700 14px/1 var(--font-sans);padding:10px 20px;border-radius:var(--radius-pill);white-space:nowrap">
+      <a href="/contact" class="nav-contact-link" style="background:var(--action-primary-bg);color:var(--action-primary-fg);font:700 14px/1 var(--font-sans);padding:10px 20px;border-radius:var(--radius-pill);white-space:nowrap">
         Contact us
       </a>
     ) : null}
@@ -194,9 +214,15 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
 </header>
 
 <style>
+  .site-nav { align-items: center; }
+
   :global(.site-header) { transition: transform 320ms ease; }
   :global(.site-header.nav-hidden) { transform: translateY(-100%); }
   :global(.site-header:has(.nav-dropdown-item[data-open="true"])) { background: #F8F7F3 !important; }
+  /* mobile: the whole menu panel shares one background, so the header row
+     above it should switch to that same color while it's open instead of
+     staying transparent over the hero image behind it */
+  :global(.site-header:has(.site-nav[data-open="true"])) { background: var(--surface-raised) !important; }
 
   :global(.nav-dropdown-chevron) { transition: transform var(--dur-base, 180ms) ease; }
   :global(.nav-dropdown-item[data-open="true"] .nav-dropdown-chevron) { transform: rotate(180deg); }
@@ -265,8 +291,32 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
   .nav-megamenu-intro:hover :global(.nav-megamenu-link-arrow),
   .nav-megamenu-secondary:hover :global(.nav-megamenu-link-arrow) { opacity: 1; transform: translateX(0); }
 
+  .nav-mobile-submenu { display: none; }
+  .nav-mobile-submenu-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    font: var(--type-nav);
+    color: var(--text-body);
+    padding: var(--space-3) 0;
+  }
+
   @media (max-width: 1024px) {
     .nav-megamenu { display: none; }
+
+    /* collapsed = pointing right, expanded = pointing down */
+    :global(.nav-dropdown-chevron) { transform: rotate(-90deg); }
+    :global(.nav-dropdown-item[data-open="true"] .nav-dropdown-chevron) { transform: rotate(0deg); }
+
+    .nav-dropdown-item[data-open="true"] .nav-mobile-submenu {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: var(--space-2);
+      padding-left: var(--space-5);
+      margin-top: var(--space-5);
+    }
   }
 </style>
 
@@ -311,21 +361,17 @@ const textColor = transparent ? 'var(--cream-50)' : 'var(--ink-900)';
     triggers.forEach((trigger) => {
       trigger.addEventListener('click', (e) => {
         e.stopPropagation();
-        // below 1024px the mega-menu panel is hidden (see CSS), so tapping
-        // the item should just navigate instead of toggling a dead dropdown
-        if (window.innerWidth < 1024) {
-          const href = trigger.dataset.href;
-          if (href) window.location.href = href;
-          return;
-        }
+        // below 1024px there's no mega-menu panel (see CSS) — instead the
+        // item's own .nav-mobile-submenu expands inline, driven by the same
+        // data-open attribute on .nav-dropdown-item
         const menuName = trigger.dataset.menu;
         const item = trigger.closest<HTMLElement>('.nav-dropdown-item');
         const panel = header.querySelector<HTMLElement>(`.nav-megamenu[data-menu-panel="${menuName}"]`);
         const isOpen = item?.dataset.open === 'true';
         closeAll();
-        if (item && panel && !isOpen) {
+        if (item && !isOpen) {
           item.dataset.open = 'true';
-          panel.dataset.open = 'true';
+          if (panel) panel.dataset.open = 'true';
         }
       });
     });
