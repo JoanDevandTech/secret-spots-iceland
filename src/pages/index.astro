@@ -12,9 +12,9 @@ import Button from '../components/Button.astro';
 import FaqItem from '../components/FaqItem.astro';
 
 import lukePhotographerImg from '../assets/images/reykjanes-photographer-luke.jpg';
-import waterfallImg from '../assets/images/highlands-traveller-waterfall.webp';
+import waterfallImg from '../assets/images/south-coast-vestrahorn-tour.webp';
 import lavaVideoUrl from '../assets/images/volcano-eruption-lava-flow-vertical-iceland.mp4?url';
-import heroVideoUrl from '../assets/images/iceland-travel.mp4?url';
+import heroVideoUrl from '../assets/images/hero-slowmo.mp4?url';
 import highlandsTourImg from '../assets/images/south-coast-glacier-snowmobile.webp';
 import ringRoadTourImg from '../assets/images/glacier-lagoon-south-coast-drone.webp';
 
@@ -71,7 +71,7 @@ const tourSlug = (href: string) => (href.startsWith('/tours/') ? href.split('/')
 >
   <Hero
     framedImage={waterfallImg}
-    framedImageAlt="Waterfall in the Icelandic highlands"
+    framedImageAlt="Vestrahorn mountain on Iceland's South Coast"
     framedVideo={heroVideoUrl}
     subtitle="Discover Iceland through photography tours in Iceland designed around your pace, interests, and the best light. Explore hidden landscapes with a local Iceland private tour guide."
     primaryVariant="dark"
@@ -155,8 +155,12 @@ const tourSlug = (href: string) => (href.startsWith('/tours/') ? href.split('/')
         </a>
       ))}
     </div>
-    <div class="grid-4" data-reveal>
-      {REVIEWS.map((r) => <ReviewCard name={r.name} date={r.date} initial={r.initial} quote={r.quote} />)}
+    <div class="grid-4 customer-reviews-grid" data-reveal>
+      {REVIEWS.map((r) => (
+        <div class="customer-reviews-grid-item">
+          <ReviewCard name={r.name} date={r.date} initial={r.initial} quote={r.quote} style="height:100%" />
+        </div>
+      ))}
     </div>
   </Section>
 
@@ -174,10 +178,10 @@ const tourSlug = (href: string) => (href.startsWith('/tours/') ? href.split('/')
     </div>
   </section>
 
-  <div style="padding:0 var(--space-8)" id="how-it-works">
-    <section style="padding:var(--space-13) var(--space-9)">
+  <div class="container-pad" id="how-it-works">
+    <section style="padding:var(--space-13) 0">
       <div data-reveal class="grid-1-1-gap5" style="max-width:1200px;margin:0 auto">
-        <div style="overflow:hidden;border-radius:32px;aspect-ratio:437/776">
+        <div class="how-it-works-video-frame" style="overflow:hidden;border-radius:32px;aspect-ratio:437/776">
           <video class="lazy-video" data-src={lavaVideoUrl} muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
         </div>
         <div style="display:flex;flex-direction:column;gap:var(--space-7);align-items:flex-start">
@@ -221,6 +225,29 @@ const tourSlug = (href: string) => (href.startsWith('/tours/') ? href.split('/')
   .cta-pill:hover { background: var(--action-dark-bg-hover); }
   .info-pill:hover { background: rgba(39,51,60,.05); }
   .card-clickable:active { transform: var(--press-scale); }
+
+  @media (max-width: 768px) {
+    /* the lava video is portrait on desktop (next to the text column), but
+       full-width on mobile — keep it landscape there, wider than tall */
+    .how-it-works-video-frame { aspect-ratio: 4 / 3 !important; }
+  }
+
+  @media (max-width: 560px) {
+    /* carousel instead of a long vertical stack of review cards */
+    .customer-reviews-grid {
+      display: flex !important;
+      width: 100%;
+      align-self: stretch;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: var(--space-5);
+      padding: 4px 0 var(--space-3);
+      scrollbar-width: none;
+    }
+    .customer-reviews-grid::-webkit-scrollbar { display: none; }
+    .customer-reviews-grid-item { flex: 0 0 85%; min-width: 0; scroll-snap-align: start; }
+  }
 </style>
 
 <script>

@@ -98,7 +98,7 @@ const REVIEWS = [
     </div>
   </Hero>
 
-  <section class="tour-block">
+  <section class="tour-block" style="padding-bottom:var(--space-13)">
     <div style="max-width:700px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-7);align-items:center">
       <div style="display:flex;flex-direction:column;gap:var(--space-4);align-items:center;text-align:center">
         <h2 style="font:400 2.5rem/1.2 var(--font-display);color:#081824;margin:0">What to Expect on the Golden Circle Tour</h2>
@@ -191,14 +191,14 @@ const REVIEWS = [
         <h2 style="font:400 2.5rem/1.2 var(--font-display);color:var(--text-heading);margin:0">Photographing the Golden Circle</h2>
         <p style="font:var(--type-lead);color:var(--text-body);margin:0">The Golden Circle is one of Earth's most photographed routes — but the best images come from timing, perspective, and knowing where to stand. Geysers erupting in golden light, waterfalls with rainbows, tectonic plates framing the landscape, steam vents at sunrise — every location has a perfect moment.</p>
         <p style="font:var(--type-lead);color:var(--text-body);margin:0">Whether you're shooting with a professional camera or your phone, every stop on this tour is chosen with composition and light in mind. Professional photography guidance is included throughout — this is not just a tour, it's an experience designed for travellers who want to come home with images that tell a real story.</p>
-        <Button variant="outline" href="/iceland-photography" iconAfter="arrow-right">See Our Gallery</Button>
+        <Button variant="outline" href="/iceland-photography" iconAfter="arrow-right">See Our Photography Guide</Button>
       </div>
     </div>
   </section>
 
   <section style="background:#081824;border-radius:32px 32px 0 0;padding:var(--space-8)">
     <div style="position:relative;border-radius:24px;overflow:hidden;background:var(--cream-50);min-height:520px;display:flex;align-items:center;padding:var(--space-13)">
-      <Image src={ctaImg} alt="Family enjoying a geothermal steam vent in North Iceland" width={1600} quality={80} loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />
+      <Image src={ctaImg} alt="Family enjoying a geothermal steam vent in North Iceland" width={1600} quality={80} loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%" />
       <div style="position:absolute;inset:0;background:linear-gradient(90deg, rgba(251,246,240,.97) 40%, rgba(251,246,240,.15) 90%)"></div>
       <div style="position:relative;display:flex;flex-direction:column;gap:var(--space-9);align-items:flex-start;max-width:600px">
         <div style="display:flex;flex-direction:column;gap:var(--space-6)">
@@ -227,17 +227,17 @@ const REVIEWS = [
 
   .tour-info-bar {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-7);
+    gap: var(--space-6);
     background: var(--cream-50);
-    border-radius: 100px;
-    padding: var(--space-5) var(--space-7);
+    border-radius: 32px;
+    padding: var(--space-7);
     max-width: 1200px;
     margin: 0 auto;
-    flex-wrap: wrap;
   }
-  .tour-info-bar-stats { display: flex; align-items: center; gap: var(--space-6); flex-wrap: wrap; }
+  .tour-info-bar-stats { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-5); }
+  .tour-info-bar-dot { display: none; }
   .tour-info-bar-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--ink-900); flex: 0 0 auto; }
 
   .highlights-carousel {
@@ -246,6 +246,7 @@ const REVIEWS = [
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     padding: 0 var(--space-8);
+    scroll-padding: 0 var(--space-8);
     scrollbar-width: none;
   }
   .highlights-carousel::-webkit-scrollbar { display: none; }
@@ -279,11 +280,6 @@ const REVIEWS = [
   @media (max-width: 768px) {
     .tour-row { flex-direction: column; align-items: stretch; }
     .tour-row-media { flex-basis: auto !important; width: 100%; order: -1; }
-  }
-  @media (max-width: 768px) {
-    .tour-info-bar { border-radius: 32px; justify-content: center; }
-    .tour-info-bar-stats { flex-direction: column; align-items: flex-start; justify-content: center; }
-    .tour-info-bar-dot { display: none; }
   }
   @media (max-width: 640px) {
     .highlight-card { flex-basis: 78vw; }
